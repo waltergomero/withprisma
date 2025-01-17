@@ -11,7 +11,7 @@ const LoginPage = async () => {
 //   if (session) redirect("/");
 
   return (
-    <main className="flex items-center justify-center min-h-screen bg-gray-100">
+    <main className="flex min-h-screen items-center justify-center bg-gray-100">
     <div className=" w-96 max-w-md bg-white p-8 rounded-lg shadow-md">
       <LoginForm/>
     </div>
