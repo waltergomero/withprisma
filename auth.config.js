@@ -1,12 +1,10 @@
 import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
-//import db from "@/utils/dbconnection";
-import User from "@/models/user2";
 import bcryptjs from "bcryptjs";
 import { userSigninSchema } from "@/schemas/validation-schemas";
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import { prisma } from "@/lib/prisma"
+import prisma  from "@/lib/prisma"
 
  
 export default {
@@ -28,9 +26,7 @@ export default {
             const { email, password } = credentials;
             
             try {              
-               // await db.connectDB();
-               // const user = await User.findOne({email: email});
-               // await db.disconnectDB();
+               const user = await prisma.user.findUnique({where: {email: email}});
                if (user) {
                     const isMatch =  await bcryptjs.compare(password, user.password); 
 

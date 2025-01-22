@@ -1,17 +1,17 @@
 'use client';
 
 import React, { Fragment } from 'react';
-import {  AtSymbolIcon,  KeyIcon, EyeIcon, EyeSlashIcon,} from '@heroicons/react/24/outline';
+//import {  AtSymbolIcon,  KeyIcon, EyeIcon, EyeSlashIcon,} from '@heroicons/react/24/outline';
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import SocialButtons from './social-buttons';
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
+import { ArrowRightIcon, AtSymbolIcon,  KeyIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { toast } from 'react-toastify';
 import { ZodErrors } from "@/components/common/zod-errors";
-// import { executeAction } from "@/lib/executeAction";
+import { doCredentialLogin } from '@/actions/user-actions';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -32,7 +32,7 @@ const LoginForm = () => {
             router.push("/admin");
         }
     } catch (e) {
-      toast.error("Check your Credentials");
+      toast.error("Check your Credentials: " + e);
     }
  }
 

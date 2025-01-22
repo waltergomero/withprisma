@@ -5,9 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import SocialButtons from './social-buttons';
 import Link from 'next/link';
-import {  AtSymbolIcon,  KeyIcon, EyeIcon, EyeSlashIcon,} from '@heroicons/react/24/outline';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
-//import { createUser } from '@/actions/user-actions';
+import { ArrowRightIcon, AtSymbolIcon,  KeyIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
+import { createUser } from '@/actions/user-actions';
 import { toast } from 'react-toastify';
 import { ZodErrors } from "@/components/common/zod-errors";
 
@@ -86,7 +85,7 @@ const RegisterForm = () => {
          <ZodErrors error={state?.zodErrors?.password} />
         </div>
         <Button className="w-full" variant="submit" type="submit">
-          Save <ArrowRightIcon className="h-5 w-5 text-gray-50" />
+          Register <ArrowRightIcon className="h-8 w-8 text-gray-50" />
         </Button>
       </form>
 
