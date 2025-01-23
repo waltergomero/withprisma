@@ -39,7 +39,10 @@ export const fetchVisibleImagesByCategory = async (category_id) => {
     const _images = await prisma.gallery.findMany({
                     where: {
                         AND: [{category_id: category_id}, {make_visible: true}]
-                          }
+                          },
+                    select: {
+                      category_name: true, path: true
+                    }
                         }) 
     const images = JSON.parse(JSON.stringify(_images));
     return images
@@ -179,8 +182,7 @@ export async function MakeImageVisible(image_id, user_email) {
         id: image_id 
             }
           });
-    console.log("here 2", imageInfo.category_id)
-
+  
     const categoryExist = await prisma.homepagecategories.findMany({
       where: {
         category_id: imageInfo.category_id

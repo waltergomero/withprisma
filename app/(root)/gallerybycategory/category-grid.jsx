@@ -12,6 +12,7 @@ import lgThumbnail from "lightgallery/plugins/thumbnail";
 import Thumbnail from "lightgallery/plugins/thumbnail";
 
 const CategoryGrid = ({images}) => {
+  console.log("images: ", images)
   const categoryname = "CATEGORY : " + images[0]["category_name"];
 
   const onInit = () => {
@@ -37,9 +38,9 @@ const CategoryGrid = ({images}) => {
             speed={500}
             plugins={[Thumbnail, lgZoom]}
           >       
-        {images && images?.map((item) =>(
+        {images && images?.map((item, index) =>(
           <Link
-             key={item.id}
+             key={item.index}
              href={item.path}
              shallow
              className="after:content group relative mb-0.5 block w-full cursor-zoom-in after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight">
