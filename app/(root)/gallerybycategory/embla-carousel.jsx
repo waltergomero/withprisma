@@ -2,6 +2,7 @@
 import React from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
 import ClassNames from 'embla-carousel-class-names'
+
 import {
   NextButton,
   PrevButton,
@@ -10,9 +11,11 @@ import {
 import { DotButton, useDotButton } from './embla-carousel-dot-buttons'
 import Image from 'next/image';
 
+
+
 const EmblaCarousel = (props) => {
   const { slides, options } = props
-  const [emblaRef, emblaApi] = useEmblaCarousel(options, [ClassNames()])
+  const [emblaRef, emblaApi] = useEmblaCarousel({loop:true}, [ClassNames()])
 
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
     useDotButton(emblaApi)
@@ -25,7 +28,7 @@ const EmblaCarousel = (props) => {
   } = usePrevNextButtons(emblaApi)
 
   return (
-    <div className="embla pt-40">
+    <div className="embla pt-18">
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
           {slides.map((s, index) => (

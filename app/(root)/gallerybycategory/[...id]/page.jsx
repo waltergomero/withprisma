@@ -8,7 +8,8 @@ import {fetchVisibleImagesByCategory} from "@/actions/gallery-actions";
 import EmblaCarousel from '../embla-carousel';
 //import ReactDOM from 'react-dom/client';
 import '@/styles/embla/css/base.css';
-import '@/styles/embla/css/embla.css';
+import "@/styles/embla/css/embla.css"
+
 
 const OPTIONS = {}
 const SLIDE_COUNT = 5
