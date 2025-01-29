@@ -30,7 +30,7 @@ const ImageGrid =  ({images}) => {
           alt={""}
           className="transform rounded-lg brightness-90 transition will-change-auto group-hover:brightness-110"
           style={{ transform: 'translate3d(0, 0, 0)' }}             
-          src={ item.path}
+          src={ item.src}
           width={720}
           height={480}
           sizes="(max-width: 640px) 100vw,
@@ -39,7 +39,7 @@ const ImageGrid =  ({images}) => {
             25vw"
         />
           <button className="absolute top-0 right-0 rounded-sm bg-rose-400" 
-              onClick={() => removeSelectedImage(item.id, item.path, item.image_name)}>
+              onClick={() => removeSelectedImage(item.id, item.src, item.image_name)}>
               <TrashIcon className="w-6 h-6 text-white"/>
           </button> 
        </div>

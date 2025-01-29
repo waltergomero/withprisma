@@ -46,8 +46,10 @@ model gallery {
   category_id           String
   category_name         String    
   image_name            String
-  path                  String
+  src                   String
   format                String
+  width                 Int
+  height                Int
   caption               String
   make_visible          Boolean
   created_by            String
@@ -77,7 +79,9 @@ model homepagecategories {
   category_id           String    @unique
   category_name         String    @unique
   image_name            String
-  path                  String
+  src                   String
+  width                 Int
+  height                Int
   created_by            String
   updated_by            String
 }
@@ -86,7 +90,9 @@ model image {
     id                  String    @id @default(auto()) @map("_id") @db.ObjectId
     product_id          String
     image_name          String
-    path                String
+    src                 String
     format              String
+    width               Int
+    height              Int
     order               Int
 }

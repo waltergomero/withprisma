@@ -37,8 +37,10 @@ export async function POST(req) {
     const addImage = new Images({
       image_name: imageName,
       product_id: product_id,
-      path: partialPath,
+      src: partialPath,
       format: format,
+      width: dimensions.width,
+      height: dimensions.height,
       order: order,
     });
     db.connect();

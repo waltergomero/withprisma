@@ -11,15 +11,16 @@ const GalleryGrid = ({images}) => {
         {images && images?.map((item) =>(
           <Link
              key={item.category_id}
-             href={`/gallerybycategory/${item.category_id}`}
+            //  href={`/gallerybycategory/${item.category_id}`}
+            href={`/emblabycategory/${item.category_id}`}
              shallow
-             className="after:content group relative mb-0.5 block w-full cursor-zoom-in after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
+             className="after:content group relative mb-0.5 block w-full  after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
                   >
               <Image
               alt="Next.js Conf photo"
               className="transform brightness-40 transition will-change-auto group-hover:brightness-110"
               style={{ transform: 'translate3d(0, 0, 0)' }}        
-              src={item.path}
+              src={item.src}
               width={720}
               height={480}
               sizes="(max-width: 640px) 100vw,

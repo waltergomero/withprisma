@@ -38,14 +38,17 @@ export async function POST(req) {
       category_id: category_id,
       category_name: category_name,
       image_name: imageName,
-      path: partialPath,
+      src: partialPath,
       format: format,
+      width: dimensions.width,
+      height: dimensions.height,
       caption: "",
       make_visible: false,
       created_by: user_email,
       updated_by: user_email,
     };
  
+    console.log("image save: ", addImageToGallery)
     const data = await prisma.gallery.create({ data: addImageToGallery});
  
     return NextResponse.json({ status: "success" });

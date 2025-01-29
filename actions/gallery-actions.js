@@ -41,7 +41,7 @@ export const fetchVisibleImagesByCategory = async (category_id) => {
                         AND: [{category_id: category_id}, {make_visible: true}]
                           },
                     select: {
-                      category_name: true, path: true
+                      category_name: true, path: true, format:true
                     }
                         }) 
     const images = JSON.parse(JSON.stringify(_images));
@@ -105,7 +105,7 @@ export async function updateImageCategory(formData) {
     const id = formData.get("image_id");
     const category_name = formData.get("category_name");
     const category_id = formData.get("category_id");
-    const path = formData.get("path");
+    const src = formData.get("path");
     const image_name = formData.get("image_name");
     const caption = formData.get("caption");
     const updated_by = formData.get("updated_by");
@@ -202,7 +202,9 @@ export async function MakeImageVisible(image_id, user_email) {
           category_id: imageInfo.category_id,
           category_name: imageInfo.category_name,
           image_name: imageInfo.image_name,
-          path: imageInfo.path,
+          src: imageInfo.src,
+          width: imageInfo.width,
+          height: imageInfo.height,
           created_by:user_email,
           updated_by:user_email,
         };
