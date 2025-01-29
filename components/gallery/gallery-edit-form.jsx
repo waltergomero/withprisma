@@ -19,7 +19,7 @@ const EditImageForm = ({image, categories}) => {
     const [caption, setCaption] = useState(image.caption);
     const id= image.id;
     const image_name = image.image_name;
-    const path = image.path;
+    const src = image.src;
 
     
    const saveImageInformation = async (event) => {
@@ -35,7 +35,7 @@ const EditImageForm = ({image, categories}) => {
         formdata.append("image_name", image_name);
         formdata.append("category_id", categoryValue);
         formdata.append("category_name", categoryText);
-        formdata.append("path", path);
+        formdata.append("src", src);
         formdata.append("caption", caption);
         formdata.append("updated_by", user_email);
 
@@ -85,7 +85,7 @@ const EditImageForm = ({image, categories}) => {
                     className="rounded-md"
                     width="720"  
                     height="480"                          
-                    src={image.path}  
+                    src={image.src}  
                     alt={image.caption} 
                     layout="responsive"
                     sizes="(max-width: 640px) 100vw,

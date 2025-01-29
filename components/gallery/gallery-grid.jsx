@@ -39,14 +39,14 @@ const GalleryGrid =  ({images, categories}) => {
 
         {is_admin || (user_email===item.created_by) ?
           <div>
-            <DeleteImageBtn image_id={item.id} image_path={item.src} />
+            <DeleteImageBtn image_id={item.id} image_src={item.src} />
             <EditImageBtn id={item.id} />
           </div>  : ""
         }
       {is_admin ?
         <div>
             { item.make_visible ? 
-                <SetImageNotVisible image_id={item.id} image_path={item.src} user_email={user_email}/>         
+                <SetImageNotVisible image_id={item.id} image_src={item.src} user_email={user_email}/>         
                 :  <SetImageVisible image_id={item.id} user_email={user_email} /> 
             }
         </div>

@@ -30,14 +30,14 @@ export async function POST(req) {
     var format = "Landscape";
      if (dimensions.height > dimensions.width) format = "Portrait";
 
-    const partialPath = `/images/product/${imageName}`;
-    const path = `./public/${partialPath}`
-    await fs.writeFile(path, buffer);
+    const partialSrc = `/images/product/${imageName}`;
+    const src = `./public/${partialSrc}`
+    await fs.writeFile(src, buffer);
     
     const addImage = new Images({
       image_name: imageName,
       product_id: product_id,
-      src: partialPath,
+      src: partialSrc,
       format: format,
       width: dimensions.width,
       height: dimensions.height,

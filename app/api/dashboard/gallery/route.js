@@ -30,15 +30,15 @@ export async function POST(req) {
     var format = "Landscape";
      if (dimensions.height > dimensions.width) format = "Portrait";
 
-    const partialPath = `/images/gallery/${imageName}`;
-    const path = `./public/${partialPath}`
-    await fs.writeFile(path, buffer);
+    const partialSrc = `/images/gallery/${imageName}`;
+    const src = `./public/${partialSrc}`
+    await fs.writeFile(src, buffer);
     
     const addImageToGallery = {
       category_id: category_id,
       category_name: category_name,
       image_name: imageName,
-      src: partialPath,
+      src: partialSrc,
       format: format,
       width: dimensions.width,
       height: dimensions.height,

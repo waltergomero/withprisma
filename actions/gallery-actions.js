@@ -41,7 +41,7 @@ export const fetchVisibleImagesByCategory = async (category_id) => {
                         AND: [{category_id: category_id}, {make_visible: true}]
                           },
                     select: {
-                      category_name: true, path: true, format:true
+                      category_name: true, src: true, format:true
                     }
                         }) 
     const images = JSON.parse(JSON.stringify(_images));
@@ -89,7 +89,7 @@ export const fetchImageById = async (id) => {
   try {
     const _image = await prisma.gallery.findUnique({ 
       where: {id: id},
-      select: { id: true, image_name: true, category_id: true, category_name: true, path: true}}); 
+      select: { id: true, image_name: true, category_id: true, category_name: true, src: true}}); 
 
     const image = JSON.parse(JSON.stringify(_image));
     return image;
@@ -105,7 +105,7 @@ export async function updateImageCategory(formData) {
     const id = formData.get("image_id");
     const category_name = formData.get("category_name");
     const category_id = formData.get("category_id");
-    const src = formData.get("path");
+    const src = formData.get("src");
     const image_name = formData.get("image_name");
     const caption = formData.get("caption");
     const updated_by = formData.get("updated_by");
@@ -136,7 +136,7 @@ export async function updateImageCategory(formData) {
             category_id,
             category_name,
             image_name,
-            path
+            src
           };
 
         await prisma.homepagecategories.create({data: newItem});
@@ -149,14 +149,14 @@ export async function updateImageCategory(formData) {
     }
 
 
-export async function deleteImageFromGallery(image_id, image_path) {
+export async function deleteImageFromGallery(image_id, image_src) {
 
   try {
-    await prisma.homepagecategories.delete({where: { path: image_path}});
+    await prisma.homepagecategories.delete({where: { src: image_src}});
     const response = await prisma.gallery.delete({ where: {id: image_id}});
  
     if(response){
-      fs.unlink("public" + image_path,function(err){
+      fs.unlink("public" + image_src,function(err){
         if(err) throw err;
         console.log('File deleted!');
       });
@@ -192,7 +192,7 @@ export async function MakeImageVisible(image_id, user_email) {
     if(categoryExist.length > 0){ //if category exists, then update the fields image name and image path
       const updatequery = {
         image_name: imageInfo.image_name,
-        path: imageInfo.path,
+        src: imageInfo.src,
         updated_by:user_email,
         }
         await prisma.homepagecategories.updateMany({ where: {category_id: imageInfo.category_id}, data: updatequery});
@@ -219,7 +219,7 @@ export async function MakeImageVisible(image_id, user_email) {
   revalidatePath("/admin/gallery");
 }
 
-export async function MakeImageNotVisible(image_id, image_path) {
+export async function MakeImageNotVisible(image_id, image_src) {
 
   try {
     const query = {
