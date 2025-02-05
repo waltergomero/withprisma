@@ -3,7 +3,7 @@ import React, {useRef} from 'react'
 import { useState} from "react";
 import { TrashIcon,PlusIcon} from "@heroicons/react/24/outline";
 import Compressor from "compressorjs";
-import {  useRouter } from 'next/navigation';
+import {  redirect, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useSession } from "next-auth/react";
 
@@ -24,7 +24,8 @@ const UploadImage = ({categories}) => {
         const selectedFilesArray = Array.from(e.target.files)
         setSelectedImages((previousImages) => previousImages.concat(selectedFilesArray))
         setIsActive(true);
-    }
+      }
+    
 
     const removeSelectedImage =(_name) =>{
         setSelectedImages(image => image.filter(x => x.name != _name)) 
@@ -32,7 +33,7 @@ const UploadImage = ({categories}) => {
             {
                 setIsActive(false);
             }
-    }
+          }
 
    const uploadImages = async (e) => {
     const API_PATH = "/api/dashboard/gallery/";
@@ -47,11 +48,11 @@ const UploadImage = ({categories}) => {
             const extension = image.name.substr(image.name.lastIndexOf(".") + 1);    
             new Compressor(image, {
               quality: 0.9, // 0.6 can also be used, but its not recommended to go below.
-              maxWidth: 1290,
-              maxHeight: 1290,
+              maxWidth: 1920,
+              maxHeight: 1080,
               success: (result) => {
                 const formdata = new FormData();
-                formdata.append("image", image);
+                formdata.append("image", result);
                 formdata.append("extension", extension);
                 formdata.append("category_id", categoryValue);
                 formdata.append("category_name", categoryText);
@@ -80,6 +81,8 @@ const UploadImage = ({categories}) => {
       inputFile.current.value = "";
       inputFile.current.type = "file";   
       };
+
+    redirect(`/admin/gallery/category/${categoryText}`)
   }
 
   const handleClick = e => {

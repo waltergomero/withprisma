@@ -11,13 +11,16 @@ export const metadata = {
   description: "Photo Gallery",
 };
 
-const photos = [
-  { src: "/images/gallery/1737429962181.jpg", width: 800, height: 600 },
-  { src: "/images/gallery/1737477664986.jpg", width: 1600, height: 900 },
-];
+
 export default async function Home() {
   const images = await fetchVisibleImagesForHomePage();
-  console.log("images ", images)
+
+
+  const handleClick = e => {
+    e.preventDefault();
+    console.log("e: ", e)
+  };
+
   return (
 <main className="pt-16">
 
@@ -39,10 +42,11 @@ export default async function Home() {
     <div className="flex-grow border-t border-gray-400"></div>
 </div>
  <main className="mx-auto">
-        {/* <div className="gap-0.5 columns-1  md:columns-2 l:columns-3 xl:columns-4 2xl:columns-5 m-2">
+        <div className="gap-0.5 columns-1  md:columns-2 l:columns-3 xl:columns-4 2xl:columns-5 m-2">
         <GalleryGrid images={images}/>
-        </div> */}
-       <RowsPhotoAlbum photos={images} />;
+
+        </div>
+      
       </main>
 </main>
   );

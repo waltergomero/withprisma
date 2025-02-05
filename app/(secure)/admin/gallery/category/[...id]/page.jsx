@@ -6,10 +6,10 @@ import {fetchImagesByCategory } from "@/actions/gallery-actions";
 
 const GalleryPage = async ({params}) => {
     const _params = await params;
-    const id =_params.id[0];
+    const category_name =_params.id[0].replace(/%20/g, ' ');
 
     const categories = await fetchCategories();
-    const images = await fetchImagesByCategory(id)
+    const images = await fetchImagesByCategory(category_name)
 
   return (
     <main>
@@ -19,7 +19,7 @@ const GalleryPage = async ({params}) => {
 
       ]}
     />
-    <Gallery categories={categories} images={images}/>
+    <Gallery categories={categories} images={images} category_name={category_name}/>
   </main>
   )
 }

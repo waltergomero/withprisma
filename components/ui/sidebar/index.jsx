@@ -116,8 +116,7 @@ const Sidebar =  ({ sidebarOpen, setSidebarOpen }) => {
                       <Link
                         href="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname ===
-                          "/gallery" ||
-                          pathname.includes("ui")) &&
+                          "/gallery" ||  pathname.includes("gallery")) &&
                           "bg-graydark dark:bg-meta-4"}`}
                         onClick={e => {
                           e.preventDefault()
@@ -145,7 +144,7 @@ const Sidebar =  ({ sidebarOpen, setSidebarOpen }) => {
                         {data && data?.map((item) =>(
                           <li key={item.category_id}>
                             <Link
-                              href={`/admin/gallery/category/${item.category_id}`}
+                              href={`/admin/gallery/category/${item.category_name}`}
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname ===
                                 "/admin/gallery" && "text-white"}`}
                             >

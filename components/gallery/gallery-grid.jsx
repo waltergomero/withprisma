@@ -9,7 +9,7 @@ import EditImageForm from './gallery-edit-form';
 import { useSession } from "next-auth/react";
 
 
-const GalleryGrid =  ({images, categories}) => {
+const GalleryGrid =  ({images, category_name}) => {
   const { data: session } = useSession();
   const user_email =   session?.user?.email;
   const is_admin =   session?.user?.isadmin;
@@ -19,6 +19,7 @@ const GalleryGrid =  ({images, categories}) => {
   return (
     <>
   <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-2">
+   <div className='font-medium text-bodydark2 font-semibold'>Category: {category_name === "0" ? "All" : category_name} </div>
     <div className="mt-4 columns-1 sm:columns-2 md:columns-3 lg:columns-3 xl:columns-4 2xl:columns-5">
     {images && images?.map((item) =>(
       <div className='relative after:content group relative mb-4 block w-full  after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight' 
@@ -64,28 +65,28 @@ const GalleryGrid =  ({images, categories}) => {
 export default GalleryGrid;
 
 
-const Modal = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null;
+// const Modal = ({ isOpen, onClose, children }) => {
+//   if (!isOpen) return null;
 
-  return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full relative">
-              <button
-                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                  onClick={onClose}>
-                  &#x2715; {/* Close button */}
-              </button>
-              {children}
-          </div>
-      </div>
-  );
-};
+//   return (
+//       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+//           <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full relative">
+//               <button
+//                   className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+//                   onClick={onClose}>
+//                   &#x2715; {/* Close button */}
+//               </button>
+//               {children}
+//           </div>
+//       </div>
+//   );
+// };
 
-const AlertModal = ({ item, categories, isOpen, onClose }) => {
-  return (
-      <Modal isOpen={isOpen} onClose={onClose}>
-          <EditImageForm item={item} categories={categories}/>
+// const AlertModal = ({ item, categories, isOpen, onClose }) => {
+//   return (
+//       <Modal isOpen={isOpen} onClose={onClose}>
+//           <EditImageForm item={item} categories={categories}/>
           
-      </Modal>
-  );
-};
+//       </Modal>
+//   );
+// };

@@ -8,34 +8,24 @@ import Link from "next/link";
 import { deleteImageFromGallery, MakeImageNotVisible, MakeImageVisible } from "@/actions/gallery-actions";
 import { Button } from "@/components/ui/button";
 
-
-export function EditImageBtn({id}) {
-  return (
-    <Link href={`/admin/gallery/${id}/edit`} className="absolute top-18 right-0 rounded-sm bg-blue-400">
-    <PencilIcon className="w-7 text-white" />
-  </Link>
-
-  );
-}
-
-
-export function DeleteImageBtn({ image_id, image_src, user_email}) {
+export function DeleteImageBtn({ image_id, image_src}) {
   const deleteImageId = deleteImageFromGallery.bind(null, image_id, image_src);
   return (
     <form action={deleteImageId}>
       <button className="absolute top-1 right-0 rounded-sm bg-rose-400">
-        <TrashIcon className="w-7 text-white" />
+        <TrashIcon className="w-6 text-white" />
       </button>
     </form>
   );
 }
 
+
 export function SetImageVisible({ image_id, user_email}) {
   const makeImageVisible = MakeImageVisible.bind(null, image_id, user_email);
   return (
     <form action={makeImageVisible}>
-      <button className="absolute top-10 right-0 rounded-sm bg-gray-400">
-        <EyeSlashIcon className="w-7 text-white" />
+      <button className="absolute top-8 right-0 rounded-sm bg-gray-400">
+        <EyeSlashIcon className="w-6 text-white" />
       </button>
     </form>
   );
@@ -45,12 +35,22 @@ export function SetImageNotVisible({ image_id, image_src}) {
   const makeImageNotVisble = MakeImageNotVisible.bind(null, image_id, image_src);
   return (
     <form action={makeImageNotVisble}>
-      <button className="absolute top-10 right-0 rounded-sm bg-blue-500">
-        <EyeIcon className="w-7 text-white" />
+      <button className="absolute top-8 right-0 rounded-sm bg-green-500">
+        <EyeIcon className="w-6 text-white" />
       </button>
     </form>
   );
 }
+
+export function EditImageBtn({id}) {
+  return (
+    <Link href={`/admin/gallery/${id}/edit`} className="absolute top-15 right-0 rounded-sm bg-blue-400">
+    <PencilIcon className="w-6 text-white" />
+  </Link>
+
+  );
+}
+
 
 export function SaveImageBtn() {
   return (

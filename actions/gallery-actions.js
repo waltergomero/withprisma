@@ -41,7 +41,7 @@ export const fetchVisibleImagesByCategory = async (category_id) => {
                         AND: [{category_id: category_id}, {make_visible: true}]
                           },
                     select: {
-                      category_name: true, src: true, format:true
+                      category_name: true, src: true, width: true, height:true, format:true
                     }
                         }) 
     const images = JSON.parse(JSON.stringify(_images));
@@ -52,15 +52,15 @@ export const fetchVisibleImagesByCategory = async (category_id) => {
   }
 };
 
-export const fetchImagesByCategory = async (category_id) => {
+export const fetchImagesByCategory = async (category_name) => {
   try {
     let _images = "";
 
-      if(category_id === "0"){
+      if(category_name === "0"){
           _images = await prisma.gallery.findMany({})
       }
       else{
-          _images = await prisma.gallery.findMany({where: {category_id: category_id}}) 
+          _images = await prisma.gallery.findMany({where: {category_name: category_name}}) 
       }
     const images = JSON.parse(JSON.stringify(_images));
 
@@ -152,9 +152,9 @@ export async function updateImageCategory(formData) {
 export async function deleteImageFromGallery(image_id, image_src) {
 
   try {
-    await prisma.homepagecategories.delete({where: { src: image_src}});
+    await prisma.homepagecategories.deleteMany({where: { src: image_src}});
     const response = await prisma.gallery.delete({ where: {id: image_id}});
- 
+
     if(response){
       fs.unlink("public" + image_src,function(err){
         if(err) throw err;
