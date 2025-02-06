@@ -8,7 +8,7 @@ import prisma from "@/lib/prisma";
 export async function POST(req) {
   try {
     const formData = await req.formData();
-    console.log("image: ", formData)
+
     const file = formData.get("image");
     const ext = formData.get("extension");
     const product_id = formData.get("productid");
@@ -34,7 +34,7 @@ export async function POST(req) {
 
     const partialPath = `/images/product/${imageName}`;
     const path = `./public/${partialPath}`
-    console.log("path: ", path)
+
     await fs.writeFile(path, buffer);
     
     const newImage = {

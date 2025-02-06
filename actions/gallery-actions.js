@@ -25,7 +25,7 @@ export const fetchVisibleImagesForHomePage = async () => {
  
   try {
     const _images = await prisma.homepagecategories.findMany() 
-    console.log("images: ", _images)
+  
     const images = JSON.parse(JSON.stringify(_images));
     return images
 

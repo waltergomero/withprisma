@@ -15,12 +15,6 @@ export const metadata = {
 export default async function Home() {
   const images = await fetchVisibleImagesForHomePage();
 
-
-  const handleClick = e => {
-    e.preventDefault();
-    console.log("e: ", e)
-  };
-
   return (
 <main className="pt-16">
 

@@ -48,7 +48,7 @@ export async function POST(req) {
       updated_by: user_email,
     };
  
-    console.log("image save: ", addImageToGallery)
+
     const data = await prisma.gallery.create({ data: addImageToGallery});
  
     return NextResponse.json({ status: "success" });

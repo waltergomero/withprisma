@@ -6,6 +6,7 @@ import Compressor from "compressorjs";
 import {  redirect, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useSession } from "next-auth/react";
+import heic2any from "heic2any";
 
 
 const UploadImage = ({categories}) => {
@@ -18,14 +19,29 @@ const UploadImage = ({categories}) => {
     const [isActive, setIsActive] = useState(false);
     const [categoryValue, setCategoryValue] = useState(null);
     const [categoryText, setCategoryText] = useState(null);
+    const [loading, setLoading] = useState(false);
   
     
-    const uploadImagesHandler = (e) =>{
-        const selectedFilesArray = Array.from(e.target.files)
-        setSelectedImages((previousImages) => previousImages.concat(selectedFilesArray))
-        setIsActive(true);
-      }
-    
+    const uploadImagesHandler = async (e) => {
+      const selectedFilesArray = Array.from(e.target.files);
+      setLoading(true);
+      const convertedFilesArray = await Promise.all(
+          selectedFilesArray.map(async (file) => {
+            const filename = file.name.toLowerCase();
+            const ext = filename.split(".").pop();
+              if (ext === "heic" || ext === "heif") {
+                  const convertedBlob = await heic2any({ blob: file, toType: "image/jpeg" });
+                  return new File([convertedBlob], filename.replace("." + ext, ".jpg"), { type: "image/jpeg" });
+              }
+              return file;
+          })
+      );
+      setSelectedImages((previousImages) => previousImages.concat(convertedFilesArray));
+      setLoading(false);
+      setIsActive(true);
+   
+  };
+
 
     const removeSelectedImage =(_name) =>{
         setSelectedImages(image => image.filter(x => x.name != _name)) 
@@ -163,6 +179,18 @@ const UploadImage = ({categories}) => {
                     </div>
                 </div>
                 </div>
+                { loading ? <div className="flex space-x-1">
+                            <div className="w-2 h-8 bg-blue-500 animate-pulse">
+                            </div>
+                            <div className="w-2 h-8 bg-green-500 animate-pulse delay-150">
+                            </div>
+                            <div className="w-2 h-8 bg-red-500 animate-pulse delay-300">
+                            </div>
+                            <div className="w-2 h-8 bg-yellow-500 animate-pulse delay-450">
+                            </div>
+                            <span className='m-2 text-xs'>Please wait...</span>
+                        </div> : ""}
+
                 <div className="mt-6 flex justify-center gap-4">
                 <button type="submit"
                         disabled={!isActive}

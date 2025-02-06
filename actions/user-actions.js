@@ -187,7 +187,7 @@ export async function createUser( formData, register=false) {
           updated_by: updated_by
           };
        }
-       console.log("data: ", query, id)
+
         await prisma.user.update({
           where: {
             id: id

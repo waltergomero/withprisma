@@ -38,8 +38,7 @@ export async function fetchStatusPages(query) {
         } 
       });
     const count = matchingElements.length
-    console.log("counting: ", count, matchingElements)
-  
+ 
     const totalPages = Math.ceil(Number(count) / ITEM_PER_PAGE);
     return totalPages;
 
