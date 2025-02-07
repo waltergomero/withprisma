@@ -68,8 +68,8 @@ export async function createUser( formData, register=false) {
       const isactive = true;
       const provider = "credentials";
       const type = register ? "credentials" : "created_by_admin";
-      const created_by = formData.get("created_by");
-      const updated_by = formData.get("updated_by");
+      const created_by = register ? formData.get("email") : formData.get("created_by");
+      const updated_by = register ? formData.get("email") : formData.get("updated_by");
   
       const validatedFields = userRegistrationSchema.safeParse({
         first_name,
@@ -111,7 +111,7 @@ export async function createUser( formData, register=false) {
         provider,
         type,
         created_by: created_by,
-        updated_by: created_by,
+        updated_by: updated_by,
       };
   
       await prisma.user.create({data:newUser});

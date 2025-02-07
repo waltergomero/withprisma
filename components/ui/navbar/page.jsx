@@ -15,7 +15,7 @@ const NavBar = () => {
         <div className=" max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                 <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
-                <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">Gallery</span>
+                <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">Walt Pixels</span>
             </a>
             <button onClick={() => handleClick()}
                 data-collapse-toggle="navbar-default" type="button" className="inline-flex items-center p-1 w-8 h-8 justify-center text-sm text-gray-400 rounded-lg md:hidden hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
