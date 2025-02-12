@@ -14,7 +14,7 @@ const ITEM_PER_PAGE = 10;
 export const fetchFilteredUsers = async (q, page) => {
   const _number = ITEM_PER_PAGE * (page - 1)
   try {
-    const users = await prisma.user.findMany({ 
+    const users = await prisma.User.findMany({ 
       where: {email: { contains: q, mode: 'insensitive',}},
       orderBy: [{ last_name: 'asc',}, {first_name: 'asc',}], 
       skip: _number,
@@ -32,7 +32,7 @@ export async function fetchUserPages(query) {
   noStore();
   try {
 
-    const matchingElements  = await prisma.user.findMany({ where:{ email: { contains: query,  mode: 'insensitive', }} }) 
+    const matchingElements  = await prisma.User.findMany({ where:{ email: { contains: query,  mode: 'insensitive', }} }) 
     const count = matchingElements.length
   
     const totalPages = Math.ceil(Number(count) / ITEM_PER_PAGE);
@@ -47,7 +47,7 @@ export async function fetchUserPages(query) {
 export const fetchUserById = async (id) => {
     try {
 
-      const _user = await prisma.user.findUnique({where: {id: id}});  
+      const _user = await prisma.User.findUnique({where: {id: id}});  
       const user = JSON.parse(JSON.stringify(_user));
       return user
     } catch (err) {
@@ -62,6 +62,7 @@ export async function createUser( formData, register=false) {
       const _isAdmin = formData.get("isadmin");
       const first_name = formData.get("first_name");
       const last_name = formData.get("last_name");
+      const name = formData.get("first_name") + ", " + formData.get("last_name");
       const email = formData.get("email");
       const password = formData.get("password");
       const isadmin = _isAdmin ? true : false;
@@ -90,7 +91,7 @@ export async function createUser( formData, register=false) {
     
       else{
 
-      const userexists = await prisma.user.findUnique({ where: {email: email}});
+      const userexists = await prisma.User.findUnique({ where: {email: email}});
       if (userexists) {
         return { 
           error: "userexists",
@@ -104,6 +105,7 @@ export async function createUser( formData, register=false) {
       const newUser = {
         first_name,
         last_name,
+        name,
         email,
         password: hashedPassword,
         isadmin,
@@ -114,7 +116,7 @@ export async function createUser( formData, register=false) {
         updated_by: updated_by,
       };
   
-      await prisma.user.create({data:newUser});
+      await prisma.User.create({data:newUser});
     }
   
     } catch (err) {
@@ -131,6 +133,7 @@ export async function createUser( formData, register=false) {
       const id = formData.get("id");
       const first_name = formData.get("first_name");
       const last_name = formData.get("last_name");
+      const name = formData.get("first_name") + ", " + formData.get("last_name");
       const email = formData.get("email");
       const password = formData.get("password");
       const isadmin = formData.get("isadmin");
@@ -152,7 +155,7 @@ export async function createUser( formData, register=false) {
         };
       }
   
-      const userexists = await prisma.user.findUnique({ where:{ email: email }});
+      const userexists = await prisma.User.findUnique({ where:{ email: email }});
       if (userexists) {
         if (userexists.id != id) {
           return  {error: "userexists",
@@ -160,35 +163,24 @@ export async function createUser( formData, register=false) {
         }
       }
   
-      let query = "";
+      let query = {
+        first_name: first_name,
+        last_name: last_name,
+        name: name,
+        email: email,
+        isadmin: isadmin ? true : false,
+        isactive: isactive ? true : false,
+        updated_by: updated_by
+      };;
   
       if(password){
         const salt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hash(password, salt); 
-  
-         query = {
-            first_name: first_name,
-            last_name: last_name,
-            email: email,
-            password: hashedPassword,
-            isadmin: isadmin ? true : false,
-            isactive: isactive ? true : false,
-            updated_by: updated_by
-          };
-       }
-       else{
-         
-         query = {
-          first_name: first_name,
-          last_name: last_name,
-          email: email,
-          isadmin: isadmin ? true : false,
-          isactive: isactive ? true : false,
-          updated_by: updated_by
-          };
+        let _password = {password: hashedPassword}
+        Object.assign(query, _password)
        }
 
-        await prisma.user.update({
+        await prisma.User.update({
           where: {
             id: id
           },
@@ -203,18 +195,53 @@ export async function createUser( formData, register=false) {
     redirect("/admin/users");
   }
   
-  export async function fetchUserByEmail(email) {
+  export async function fetchUserByEmail(email, provider) {
     try {
-      return await prisma.user.findUnique({
-        where: {email: email}
-      });
+      if(provider == "credentials" || provider == "")
+        {
+          return await prisma.User.findUnique({
+            where: {email: email},
+            select:{email: tru, provider:true} 
+        });
+        }
+      else{
+          return await prisma.Account.findUnique({
+          where: {email: email},
+          select:{email: tru, provider:true} 
+        });
+      }
 
     } catch (error) {
   
-      throw new Error('Failed to fetch user.');
+      throw new Error('Failed to fetch User.');
+    }
+  }
+
+  export async function fetchUserByEmailInAccount(email) {
+    try {
+        return await prisma.User.findUnique({
+            where: {email: email},
+            include:{ accounts: true},
+        });
+  
+    } catch (error) {
+  
+      throw new Error('Failed to fetch User. ' + error.message);
     }
   }
   
+  
+  export async function deleteUser(id) {
+    try {
+
+      await prisma.User.delete({where: { id: id}});
+      
+    } catch (err) {
+      throw new Error("Failed to delete user!");
+    }
+    revalidatePath("/dashboard/users");
+  }
+
   export async function doCredentialLogin(formData) {
     try {
       const email = formData.get("email");
@@ -242,20 +269,13 @@ export async function createUser( formData, register=false) {
    
   }
 
-  export async function deleteUser(id) {
-    try {
-
-      await prisma.user.delete({where: { id: id}});
-
-      
-    } catch (err) {
-      throw new Error("Failed to delete user!");
-    }
-    revalidatePath("/dashboard/users");
-  }
-
   export async function doSocialLogin(provider) {
-  
-    await signIn(provider, { redirectTo: "/admin" });
-  
+    console.log("provider: ", provider)
+   try{
+      const result = await signIn(provider, { redirectTo: "/admin" });
+    }
+    catch (error) {
+      console.log("errores: ", error )
+       return { error: "error 500" };
+     }
    }

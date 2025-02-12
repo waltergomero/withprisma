@@ -4,9 +4,8 @@ import Google from "next-auth/providers/google";
 import bcryptjs from "bcryptjs";
 import { userSigninSchema } from "@/schemas/validation-schemas";
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import prisma  from "@/lib/prisma"
+import  prisma  from "@/lib/prisma"
 
- 
 export default {
     adapter: PrismaAdapter(prisma),
     providers: [
@@ -16,7 +15,7 @@ export default {
             password: {},
         },
         async authorize(credentials) {
-
+  
             const validateFields = userSigninSchema.safeParse(credentials);
 
             if (validateFields.error) {
@@ -25,8 +24,10 @@ export default {
 
             const { email, password } = credentials;
             
-            try {              
-               const user = await prisma.user.findUnique({where: {email: email}});
+            try {       
+                console.log("enter 1")       
+               const user = await prisma.User.findUnique({where: {email: email}});
+               console.log("user ", user)     
                if (user) {
                     const isMatch =  await bcryptjs.compare(password, user.password); 
 
@@ -43,8 +44,29 @@ export default {
             }
         },
     }),
-    GitHub, 
-    Google
+    GitHub({
+        clientId: process.env.AUTH_GITHUB_ID,
+        clientSecret: process.env.AUTH_GITHUB_SECRET,
+        authorization: {
+            params: {
+                prompt: "consent",
+                access_type: "offline",
+                response_type: "code",
+            },
+        },
+    }),
+    Google({
+        clientId: process.env.AUTH_GOOGLE_ID,
+        clientSecret: process.env.AUTH_GOOGLE_SECRET,
+        authorization: {
+            params: {
+                prompt: "consent",
+                access_type: "offline",
+                response_type: "code",
+            },
+        },
+        
+    }),
     ],
     
      };

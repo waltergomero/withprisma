@@ -11,7 +11,7 @@ const ITEM_PER_PAGE = 10;
 export const fetchFilteredCategories = async (q, page) => { 
   const _number = ITEM_PER_PAGE * (page - 1)
   try {
-      const categories = await prisma.category.findMany({ 
+      const categories = await prisma.Category.findMany({ 
         where: {category_name: { contains: q, mode: 'insensitive',}},
         orderBy: [{ category_name: 'asc',}], 
         skip: _number,
@@ -30,7 +30,7 @@ export async function fetchCategoryPages(query) {
   noStore();
 
   try {
-    const matchingElements  = await prisma.category.findMany({ 
+    const matchingElements  = await prisma.Category.findMany({ 
       where: { 
         category_name: { 
           contains: query, 
@@ -51,7 +51,7 @@ export async function fetchParentCategories() {
   noStore();
 
   try {
-    const _parentcategory = await prisma.category.findMany({ 
+    const _parentcategory = await prisma.Category.findMany({ 
       select:{
         id: true,
         category_name: true,
@@ -71,7 +71,7 @@ export async function fetchParentCategories() {
 export const fetchCategoryById = async (id) => {
   try {
 
-    const _category = await prisma.category.findUnique({
+    const _category = await prisma.Category.findUnique({
       where: {id : id},
       select:{id: true, category_name: true, parent_category_id: true,
               parent_category_name: true, isactive: true, notes: true
@@ -86,7 +86,7 @@ export const fetchCategoryById = async (id) => {
 
 export const fetchCategories = async () => {
   try {
-    const _category = await prisma.category.findMany({ 
+    const _category = await prisma.Category.findMany({ 
       select:{
         id: true,
         category_name: true,
@@ -122,7 +122,7 @@ export async function createCategory(formData) {
               };
             }
 
-    const categoryexists = await prisma.category.findFirst({ where: { category_name: category_name} });
+    const categoryexists = await prisma.Category.findFirst({ where: { category_name: category_name} });
 
 
     if (categoryexists) {
@@ -131,7 +131,7 @@ export async function createCategory(formData) {
     }
 
     if(parent_category_id != "") {
-     const parentcategoryname = await prisma.category.findFirst({ 
+     const parentcategoryname = await prisma.Category.findFirst({ 
       where: {id: parent_category_id}, 
       select:{category_name: true} 
       });
@@ -151,7 +151,7 @@ export async function createCategory(formData) {
       updated_by,
     };
 
-    await prisma.category.create({data: newCategory});
+    await prisma.Category.create({data: newCategory});
 
   } catch (err) {
     return { error: "Failed to insert new category! " + err };
@@ -182,7 +182,7 @@ export async function updateCategory(formData) {
               };
             }
 
-    const categoryexists = await prisma.category.findFirst({ where: {category_name: category_name} });
+    const categoryexists = await prisma.Category.findFirst({ where: {category_name: category_name} });
 
     if (categoryexists) {
       if (categoryexists.id != id) {
@@ -192,7 +192,7 @@ export async function updateCategory(formData) {
     }
 
     if(parent_category_id != "") {
-      const parentcategoryname = await prisma.category.findFirst({ 
+      const parentcategoryname = await prisma.Category.findFirst({ 
        where: {id: parent_category_id}, 
        select:{category_name: true} 
        });
@@ -203,9 +203,9 @@ export async function updateCategory(formData) {
    }
     
    //check if parent category id exists with the same category id, if yes, then we need to update the parent category name
-   const parentcategoryids = prisma.category.findMany({where: {parent_category_id: id}})
+   const parentcategoryids = prisma.Category.findMany({where: {parent_category_id: id}})
     if (parentcategoryids){
-      await prisma.category.updateMany({
+      await prisma.Category.updateMany({
         where:{ 
               parent_category_id: id}, 
         data: {parent_category_name: category_name}
@@ -221,7 +221,7 @@ export async function updateCategory(formData) {
       updated_by,
     };
  
-    await prisma.category.update({ where: {id: id}, data: query });
+    await prisma.Category.update({ where: {id: id}, data: query });
     }
    catch (err) {
     return { error: "Failed to update category!" + err };
@@ -233,7 +233,7 @@ export async function updateCategory(formData) {
 
 export async function deleteCategory(id) {
   try {
-    await prisma.category.delete({ where: {id: id} });
+    await prisma.Category.delete({ where: {id: id} });
     } 
   catch (err) {
     throw new Error("Failed to delete category! " + err);

@@ -3,24 +3,39 @@ import React from 'react';
 import {FcGoogle} from "react-icons/fc";
 import {FaGithub} from "react-icons/fa";
 import { toast } from 'react-toastify';
-//import { doSocialLogin } from '@/actions/user-actions2';
+import { signIn, signOut, useSession } from "next-auth/react";
+import { doSocialLogin } from '@/actions/user-actions';
 
 const SocialButtons = () => {
 
-  const handleClick = async (event, provider) => {
+  // const handleClick = async (event, provider) => {
 
-    event.preventDefault();
-    try {
-        const response = await doSocialLogin(provider);
-        if (response.error) {
-            toast.error(response.error);
-        } else {
-            router.push("/admin");
-        }
-    } catch (error) {
-      toast.error("Check your Credentials");
-    }
-  };
+  //   event.preventDefault();
+  //   try {
+  //       const response = await signIn(provider, { redirectTo: "/admin" });
+  //       console.log("response: ", response)
+  //       if (response?.error) {
+  //           toast.error(response.error);
+  //       } else {
+  //           router.push("/admin");
+  //       }
+  //   } catch (error) {
+  //     toast.error("Check your Credentials");
+  //   }
+  // };
+
+  const handleClick = async (event, provider) => {
+      event.preventDefault();
+      console.log("provider: ", provider)
+      try {
+       const result =  await signIn(provider, { redirectTo: "/admin" });
+       console.log("result: ", result)
+      } catch (error) {
+        // Handle the error
+        console.error("Authentication error:", error.message);
+        
+      }
+  }
 
   return (
     <form onSubmit={handleClick} >

@@ -11,7 +11,7 @@ const ITEM_PER_PAGE = 10;
 export const fetchFilteredStatus = async (q, page) => {
   const _number = ITEM_PER_PAGE * (page - 1)
   try {
-    const status = await prisma.status.findMany({ 
+    const status = await prisma.Status.findMany({ 
       where: {status_name: { contains: q, mode: 'insensitive',}},
       orderBy: [{ status_name: 'asc',}, {status_type_id: 'asc',}], 
       skip: _number,
@@ -29,7 +29,7 @@ export const fetchFilteredStatus = async (q, page) => {
 export async function fetchStatusPages(query) {
   noStore();
   try {
-    const matchingElements  = await prisma.status.findMany({ 
+    const matchingElements  = await prisma.Status.findMany({ 
       where: { 
         status_name: { 
           contains: query, 
@@ -70,7 +70,7 @@ export async function fetchStatusTypeId() {
 
 export const fetchStatusById = async (id) => {
   try {
-    const _status = await prisma.status.findUnique({where: {id: id}});  
+    const _status = await prisma.Status.findUnique({where: {id: id}});  
     const status = JSON.parse(JSON.stringify(_status));
     return status;
   } catch (err) {
@@ -96,7 +96,7 @@ export async function createStatus(formData) {
           };
         }
 
-    const statusexists = await prisma.status.findFirst({ 
+    const statusexists = await prisma.Status.findFirst({ 
       where: { 
         AND: [
             {status_name: status_name}, 
@@ -119,7 +119,7 @@ export async function createStatus(formData) {
       updated_by,
     };
 
-    await prisma.status.create({data:newStatus});
+    await prisma.Status.create({data:newStatus});
     
   } catch (err) {
     return { error: "Failed to insert new status!" + err };
@@ -149,7 +149,7 @@ export async function updateStatus(formData) {
           };
         }
 
-    const statusexists = await prisma.status.findFirst({ 
+    const statusexists = await prisma.Status.findFirst({ 
       where: { 
         AND: [
             {status_name: status_name}, 
@@ -172,7 +172,7 @@ export async function updateStatus(formData) {
       updated_by: updated_by
     };
     
-    await prisma.status.update({
+    await prisma.Status.update({
       where: {
         id: id
       },
@@ -191,7 +191,7 @@ export async function updateStatus(formData) {
 export async function deleteStatus(id) {
   try {
 
-    await prisma.status.delete({where: {id: id}});
+    await prisma.Status.delete({where: {id: id}});
 
   } catch (err) {
     throw new Error("Failed to delete status!");

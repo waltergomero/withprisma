@@ -37,7 +37,7 @@ export default async function Home() {
 </div>
  <main className="mx-auto">
         <div className="gap-0.5 columns-1  md:columns-2 l:columns-3 xl:columns-4 2xl:columns-5 m-2">
-        <GalleryGrid images={images}/>
+       
 
         </div>
       

@@ -13,7 +13,7 @@ const ITEM_PER_PAGE = 10;
 export const fetchFilteredProducts = async (q, page) => { 
   const _number = ITEM_PER_PAGE * (page - 1)
   try {
-    const products = await prisma.product.findMany({ 
+    const products = await prisma.Product.findMany({ 
       where: {product_name: { contains: q, mode: 'insensitive',}},
       orderBy: [{ product_name: 'asc',}], 
       skip: _number,
@@ -31,7 +31,7 @@ export async function fetchProductPages(query) {
 
 
   try {
-    const matchingElements  = await prisma.product.findMany({ 
+    const matchingElements  = await prisma.Product.findMany({ 
       where: { 
         product_name: { 
           contains: query, 
@@ -51,7 +51,7 @@ export async function fetchProductPages(query) {
 
 export const fetchProductById = async (id) => {
   try {
-    const _product = await prisma.product.findUnique({
+    const _product = await prisma.Product.findUnique({
       where: {id : id},
       })
 
@@ -65,7 +65,7 @@ export const fetchProductById = async (id) => {
 
 export const fetchProducts = async () => {
   try {
-    const products = await prisma.product.findMany({ 
+    const products = await prisma.Product.findMany({ 
       orderBy: [{ product_name: 'asc',}],    
      })
     return product;
@@ -101,7 +101,7 @@ export async function createProduct(formData) {
                 };
               }
   
-      const productexists = await prisma.product.findFirst({ where: {product_name: product_name}});
+      const productexists = await prisma.Product.findFirst({ where: {product_name: product_name}});
   
       if (productexists) {
         return { 
@@ -126,7 +126,7 @@ export async function createProduct(formData) {
         updated_by
       };
   
-      await prisma.product.create({data: newProduct});
+      await prisma.Product.create({data: newProduct});
 
     } catch (err) {
       return { error: "Failed to insert new product! " + err };
@@ -164,7 +164,7 @@ export async function createProduct(formData) {
                   };
               }
 
-      const productexists = await prisma.product.findFirst({where: {product_name: product_name }});
+      const productexists = await prisma.Product.findFirst({where: {product_name: product_name }});
   
       if (productexists) {
         if (productexists._id != id) {
@@ -190,7 +190,7 @@ export async function createProduct(formData) {
         updated_by,
       };    
   
-      await prisma.product.update({ where:{id: id}, data:query });
+      await prisma.Product.update({ where:{id: id}, data:query });
 
       }
      catch (err) {
@@ -204,7 +204,7 @@ export async function createProduct(formData) {
 export async function deleteProduct(id) {
   try {
 
-    await prisma.product.delete({ where: {id: id} });
+    await prisma.Product.delete({ where: {id: id} });
 
   } catch (err) {
     throw new Error("Failed to delete product! " + err);

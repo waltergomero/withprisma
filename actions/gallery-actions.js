@@ -12,7 +12,7 @@ const ITEM_PER_PAGE = 10;
 export const fetchImages = async () => {
  
   try {
-    const _images = await prisma.gallery.find() 
+    const _images = await prisma.Gallery.find() 
     const images = JSON.parse(JSON.stringify(_images));
     return images
 
@@ -24,8 +24,9 @@ export const fetchImages = async () => {
 export const fetchVisibleImagesForHomePage = async () => {
  
   try {
-    const _images = await prisma.homepagecategories.findMany() 
-  
+    
+    const _images = await prisma.Homepagecategories.findMany() 
+
     const images = JSON.parse(JSON.stringify(_images));
     return images
 
@@ -36,7 +37,7 @@ export const fetchVisibleImagesForHomePage = async () => {
 
 export const fetchVisibleImagesByCategory = async (category_id) => {
   try {
-    const _images = await prisma.gallery.findMany({
+    const _images = await prisma.Gallery.findMany({
                     where: {
                         AND: [{category_id: category_id}, {make_visible: true}]
                           },
@@ -57,10 +58,10 @@ export const fetchImagesByCategory = async (category_name) => {
     let _images = "";
 
       if(category_name === "0"){
-          _images = await prisma.gallery.findMany({})
+          _images = await prisma.Gallery.findMany({})
       }
       else{
-          _images = await prisma.gallery.findMany({where: {category_name: category_name}}) 
+          _images = await prisma.Gallery.findMany({where: {category_name: category_name}}) 
       }
     const images = JSON.parse(JSON.stringify(_images));
 
@@ -73,7 +74,7 @@ export const fetchImagesByCategory = async (category_name) => {
 
 export const fetchCategoryWithImages = async () => {
   try {
-    const _categories = await prisma.homepagecategories.findMany({select:{category_id: true, category_name: true}
+    const _categories = await prisma.Homepagecategories.findMany({select:{category_id: true, category_name: true}
       });
 
     const categories = JSON.parse(JSON.stringify(_categories));
@@ -87,7 +88,7 @@ export const fetchCategoryWithImages = async () => {
 
 export const fetchImageById = async (id) => {
   try {
-    const _image = await prisma.gallery.findUnique({ 
+    const _image = await prisma.Gallery.findUnique({ 
       where: {id: id},
       select: { id: true, image_name: true, category_id: true, category_name: true, src: true}}); 
 
@@ -117,18 +118,18 @@ export async function updateImageCategory(formData) {
       updated_by: updated_by,
     };
 
-    await prisma.gallery.update({ 
+    await prisma.Gallery.update({ 
           where: {id: id}, data: query});
 
-    const imageExist = await prisma.homepagecategories.findUnique({ where:{image_name: image_name}});
-    const categoryExist = await prisma.homepagecategories.findUnique({ where: {category_name_name: category_name}});
+    const imageExist = await prisma.Homepagecategories.findUnique({ where:{image_name: image_name}});
+    const categoryExist = await prisma.Homepagecategories.findUnique({ where: {category_name_name: category_name}});
 
     if(imageExist && categoryExist){  
-        await prisma.homepagecategories.delete({ where: {category_id: categoryExist.category_id}}); 
-        await prisma.homepagecategories.update({ where: {id: imageExist.id}, data: query}); 
+        await prisma.Homepagecategories.delete({ where: {category_id: categoryExist.category_id}}); 
+        await prisma.Homepagecategories.update({ where: {id: imageExist.id}, data: query}); 
      }
     else if(imageExist && !categoryExist){ //update the image name and path in the homepagecategories collection
-      await prisma.homepagecategories.update({ where: {id: imageExist.id}, data: query}); 
+      await prisma.Homepagecategories.update({ where: {id: imageExist.id}, data: query}); 
      }
     else{
         if(!imageExist && !categoryExist){ //if category do not exists, then add the category to the homepagecategories collection
@@ -139,7 +140,7 @@ export async function updateImageCategory(formData) {
             src
           };
 
-        await prisma.homepagecategories.create({data: newItem});
+        await prisma.Homepagecategories.create({data: newItem});
           }
       } 
     }catch (err) {
@@ -152,8 +153,8 @@ export async function updateImageCategory(formData) {
 export async function deleteImageFromGallery(image_id, image_src) {
 
   try {
-    await prisma.homepagecategories.deleteMany({where: { src: image_src}});
-    const response = await prisma.gallery.delete({ where: {id: image_id}});
+    await prisma.Homepagecategories.deleteMany({where: { src: image_src}});
+    const response = await prisma.Gallery.delete({ where: {id: image_id}});
 
     if(response){
       fs.unlink("public" + image_src,function(err){
@@ -175,15 +176,15 @@ export async function MakeImageVisible(image_id, user_email) {
         make_visible: true,
     };    
 
-    await prisma.gallery.update({ where: {id: image_id}, data: query});
+    await prisma.Gallery.update({ where: {id: image_id}, data: query});
 
-    const imageInfo = await prisma.gallery.findUnique({ 
+    const imageInfo = await prisma.Gallery.findUnique({ 
       where: {
         id: image_id 
             }
           });
   
-    const categoryExist = await prisma.homepagecategories.findMany({
+    const categoryExist = await prisma.Homepagecategories.findMany({
       where: {
         category_id: imageInfo.category_id
             }
@@ -195,7 +196,7 @@ export async function MakeImageVisible(image_id, user_email) {
         src: imageInfo.src,
         updated_by:user_email,
         }
-        await prisma.homepagecategories.updateMany({ where: {category_id: imageInfo.category_id}, data: updatequery});
+        await prisma.Homepagecategories.updateMany({ where: {category_id: imageInfo.category_id}, data: updatequery});
       }
       else{
         const newItem = {
@@ -209,7 +210,7 @@ export async function MakeImageVisible(image_id, user_email) {
           updated_by:user_email,
         };
 
-        await prisma.homepagecategories.create({data: newItem});
+        await prisma.Homepagecategories.create({data: newItem});
       }
     
   } catch (err) {
@@ -225,7 +226,7 @@ export async function MakeImageNotVisible(image_id, image_src) {
     const query = {
       make_visible: false,
   };    
-    await prisma.gallery.update({ where: {id: image_id}, data: query });
+    await prisma.Gallery.update({ where: {id: image_id}, data: query });
     
   } catch (err) {
     //throw new Error(err);
