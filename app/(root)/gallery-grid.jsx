@@ -7,11 +7,10 @@ import Link from 'next/link';
 const GalleryGrid = ({images}) => {
 
   return (
-        <div className='relative text-center'>     
+        <div>     
         {images && images?.map((item) =>(
           <Link
              key={item.category_id}
-            //  href={`/gallerybycategory/${item.category_id}`}
             href={`/reactalbumbycategory/${item.category_id}`}
              shallow
              className="after:content group relative mb-0.5 block w-full  after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"

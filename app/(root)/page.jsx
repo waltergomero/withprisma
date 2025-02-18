@@ -29,7 +29,7 @@ export default async function Home() {
 </div>
 <div className="flex py-4 items-center bg-black-2">
     <div className="flex-grow border-t border-gray-400"></div>
-    <Link href="" className="flex-shrink mx-2 text-gray-400">CATEGORY</Link> | 
+    <Link href="/category" className="flex-shrink mx-2 text-gray-400">CATEGORY</Link> | 
     <Link href="" className="flex-shrink mx-2 text-gray-400">COLLECTIONS</Link> |
     <Link href="" className="flex-shrink mx-2 text-gray-400">LANDSCAPE</Link> |
     <Link href="" className="flex-shrink mx-2 text-gray-400">PORTRAIT</Link>
@@ -38,7 +38,7 @@ export default async function Home() {
  <main className="mx-auto">
         <div className="gap-0.5 columns-1  md:columns-2 l:columns-3 xl:columns-4 2xl:columns-5 m-2">
        
-
+        <GalleryGrid images={images}/>
         </div>
       
       </main>

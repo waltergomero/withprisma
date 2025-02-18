@@ -34,9 +34,9 @@ export default async function UsersTable({ query, currentPage }) {
                             className="mr-2 rounded-full"
                             width={28}
                             height={28}
-                            alt={`${user.first_name}'s profile picture`}
+                            alt=""
                           />
-                          <p>{user.last_name + ' ' + user.first_name}</p>
+                          <p>{user.name}</p>
                         </div>
                         <p className="text-sm text-gray-500">Email: {user.email}</p>
                         <div>
@@ -60,10 +60,7 @@ export default async function UsersTable({ query, currentPage }) {
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="px-4 py-4 font-medium text-black dark:text-white xl:pl-8">
-                Last name
-              </th>
-              <th className="px-4 py-4 font-medium text-black dark:text-white">
-                First name
+                Name
               </th>
               <th className=" px-4 py-4 font-medium text-black dark:text-white">
                 Email
@@ -85,13 +82,8 @@ export default async function UsersTable({ query, currentPage }) {
               <tr key={user.id}>
                 <td className="border-b border-[#eee] px-4 py-4 pl-9 dark:border-strokedark xl:pl-8">
                   <h5 className="font-medium text-black dark:text-white">
-                    {user.last_name}
+                    {user.name}
                   </h5>
-                </td>
-                <td className="border-b border-[#eee] px-4 py-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    {user.first_name}
-                  </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-4 dark:border-strokedark">
                   <p className="text-black dark:text-white">

@@ -1,41 +1,34 @@
-"use client"
+'use client';
+
 import React from 'react';
+import { useEffect } from 'react'
 import {FcGoogle} from "react-icons/fc";
 import {FaGithub} from "react-icons/fa";
 import { toast } from 'react-toastify';
-import { signIn, signOut, useSession } from "next-auth/react";
-import { doSocialLogin } from '@/actions/user-actions';
+import { signIn, signOut} from "next-auth/react";
+import {doSocialLogin} from '@/actions/user-actions';
+
 
 const SocialButtons = () => {
 
-  // const handleClick = async (event, provider) => {
-
-  //   event.preventDefault();
-  //   try {
-  //       const response = await signIn(provider, { redirectTo: "/admin" });
-  //       console.log("response: ", response)
-  //       if (response?.error) {
-  //           toast.error(response.error);
-  //       } else {
-  //           router.push("/admin");
-  //       }
-  //   } catch (error) {
-  //     toast.error("Check your Credentials");
-  //   }
-  // };
-
+  useEffect(() => {
+    const handleSignOut = async () => {
+      await signOut({ redirect: false });
+    };
+    handleSignOut();
+  }, []);
+  
   const handleClick = async (event, provider) => {
-      event.preventDefault();
-      console.log("provider: ", provider)
-      try {
-       const result =  await signIn(provider, { redirectTo: "/admin" });
-       console.log("result: ", result)
-      } catch (error) {
-        // Handle the error
-        console.error("Authentication error:", error.message);
+    event.preventDefault();
+
+    try {
+       await signIn(provider, { redirectTo: "/admin" });
         
-      }
-  }
+     } catch (error) {
+      toast.error("Authentication error: " + error.message);
+     }
+   };
+
 
   return (
     <form onSubmit={handleClick} >

@@ -25,7 +25,14 @@ export const fetchVisibleImagesForHomePage = async () => {
  
   try {
     
-    const _images = await prisma.Homepagecategories.findMany() 
+    const _images = await prisma.Homepagecategories.findMany({
+      orderBy: [
+        {
+          createdAt: "desc", // or pass "asc" to order ascendingly
+        },
+      ],
+      take: 8
+    }) 
 
     const images = JSON.parse(JSON.stringify(_images));
     return images
@@ -34,6 +41,20 @@ export const fetchVisibleImagesForHomePage = async () => {
     return({error: "Failed to fetch gallery images! " + err});
   }
 };
+
+export const fetctCategoriesForHomePage = async () => {
+ 
+  try {
+    const _images = await prisma.Homepagecategories.findMany();
+
+    const images = JSON.parse(JSON.stringify(_images));
+    return images
+
+  } catch (err) {
+    return({error: "Failed to fetch gallery images! " + err});
+  }
+};
+
 
 export const fetchVisibleImagesByCategory = async (category_id) => {
   try {
@@ -230,6 +251,22 @@ export async function MakeImageNotVisible(image_id, image_src) {
     
   } catch (err) {
     //throw new Error(err);
+    return({error: "Failed to set image  not visible! " + err});
+  }
+  revalidatePath("/admin/gallery");
+}
+
+export async function MakeAllImageVisibility(settings, user_email, category_name) {
+  console.log("actions params: ", settings, user_email, category_name)
+  try {
+    const query = {
+      make_visible: settings,
+  };  
+    if(category_name === "0")  
+      await prisma.Gallery.updateMany({ data: query });
+    else
+      await prisma.Gallery.updateMany({ where: {category_name: category_name}, data: query });
+  } catch (err) {
     return({error: "Failed to set image  not visible! " + err});
   }
   revalidatePath("/admin/gallery");

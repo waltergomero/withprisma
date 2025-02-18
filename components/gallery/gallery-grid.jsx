@@ -2,12 +2,14 @@
 'use client';
 
 import Image from 'next/image'
-import {DeleteImageBtn, SetImageVisible, SetImageNotVisible, EditImageBtn } from './buttons';
+import {DeleteImageBtn, SetImageVisible, SetImageNotVisible, EditImageBtn, 
+  SetAllImageVisible, SetAllImageNotVisible, SetAllImageVisibility } from './buttons';
 import React, { useState, useEffect } from 'react';
 import {  PencilIcon,} from "@heroicons/react/24/outline";
+import { toast } from 'react-toastify';
 import EditImageForm from './gallery-edit-form';
 import { useSession } from "next-auth/react";
-
+import SetImageVisibility from '@/actions/gallery-actions';
 
 const GalleryGrid =  ({images, category_name}) => {
   const { data: session } = useSession();
@@ -15,11 +17,21 @@ const GalleryGrid =  ({images, category_name}) => {
   const is_admin =   session?.user?.isadmin;
 
   const [isModalOpen, setModalOpen] = useState(false);
-  
+
   return (
     <>
   <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-2">
-   <div className='font-medium text-bodydark2 font-semibold'>Category: {category_name === "0" ? "All" : category_name} </div>
+   <div className='flex justify-between  font-medium text-bodydark2 font-semibold'>
+    <div>Category: {category_name === "0" ? "All" : category_name} </div>
+    <div>
+      <span>Set all images: </span>
+      <div className="inline-flex gap-2">
+      <SetAllImageVisibility state="enable" settings={true} user_email={user_email} category_name={category_name}/>
+      <SetAllImageVisibility state="disable" settings={false} user_email={user_email} category_name={category_name}/>
+      </div>
+    </div>
+    
+   </div>
     <div className="mt-4 columns-1 sm:columns-2 md:columns-3 lg:columns-3 xl:columns-4 2xl:columns-5">
     {images && images?.map((item) =>(
       <div className='relative after:content group relative mb-4 block w-full  after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight' 
@@ -65,28 +77,4 @@ const GalleryGrid =  ({images, category_name}) => {
 export default GalleryGrid;
 
 
-// const Modal = ({ isOpen, onClose, children }) => {
-//   if (!isOpen) return null;
 
-//   return (
-//       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-//           <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full relative">
-//               <button
-//                   className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-//                   onClick={onClose}>
-//                   &#x2715; {/* Close button */}
-//               </button>
-//               {children}
-//           </div>
-//       </div>
-//   );
-// };
-
-// const AlertModal = ({ item, categories, isOpen, onClose }) => {
-//   return (
-//       <Modal isOpen={isOpen} onClose={onClose}>
-//           <EditImageForm item={item} categories={categories}/>
-          
-//       </Modal>
-//   );
-// };

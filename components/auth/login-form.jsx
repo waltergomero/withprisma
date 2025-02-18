@@ -1,8 +1,7 @@
 'use client';
 
 import React, { Fragment } from 'react';
-//import {  AtSymbolIcon,  KeyIcon, EyeIcon, EyeSlashIcon,} from '@heroicons/react/24/outline';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import SocialButtons from './social-buttons';
@@ -12,13 +11,26 @@ import { ArrowRightIcon, AtSymbolIcon,  KeyIcon, EyeIcon, EyeSlashIcon } from '@
 import { toast } from 'react-toastify';
 import { ZodErrors } from "@/components/common/zod-errors";
 import { doCredentialLogin } from '@/actions/user-actions';
+import { useSearchParams } from 'next/navigation';
+
+
 
 const LoginForm = () => {
+  const searchParams = useSearchParams();
+  const error = searchParams.get('error');
+
   const router = useRouter();
   const [state, setState] = useState(null);
   const [visible, setVisible] = useState(false);
-  const [password, setPassword] = useState("")
+  const [password, setPassword] = useState("");
 
+  useEffect(() => {
+    if(error === 'OAuthAccountNotLinked'){
+          toast.error("Error: This email is already associated with another account. Please sign in with that account or use a different email.")
+      }
+    }, [])
+  
+  
  
   async function onSubmit(event) {
     event.preventDefault();

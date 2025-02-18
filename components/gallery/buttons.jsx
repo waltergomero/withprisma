@@ -5,7 +5,8 @@ import {
   XCircleIcon, EyeIcon, EyeSlashIcon
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { deleteImageFromGallery, MakeImageNotVisible, MakeImageVisible } from "@/actions/gallery-actions";
+import { deleteImageFromGallery, MakeImageNotVisible, MakeImageVisible, MakeAllImageVisible, 
+  MakeAllImageNotVisible, MakeAllImageVisibility } from "@/actions/gallery-actions";
 import { Button } from "@/components/ui/button";
 
 export function DeleteImageBtn({ image_id, image_src}) {
@@ -35,16 +36,17 @@ export function SetImageNotVisible({ image_id, image_src}) {
   const makeImageNotVisble = MakeImageNotVisible.bind(null, image_id, image_src);
   return (
     <form action={makeImageNotVisble}>
-      <button className="absolute top-8 right-0 rounded-sm bg-green-500">
+      <button className="absolute top-8 right-0 rounded-sm bg-blue-500">
         <EyeIcon className="w-6 text-white" />
       </button>
     </form>
   );
 }
 
+
 export function EditImageBtn({id}) {
   return (
-    <Link href={`/admin/gallery/${id}/edit`} className="absolute top-15 right-0 rounded-sm bg-blue-400">
+    <Link href={`/admin/gallery/${id}/edit`} className="absolute top-15 right-0 rounded-sm bg-green-400">
     <PencilIcon className="w-6 text-white" />
   </Link>
 
@@ -73,3 +75,21 @@ export function CancelUpdateBtn() {
     </Link>
   );
 }
+
+export function SetAllImageVisibility({state, settings, user_email, category_name}) {
+
+  const makeAllImageVisibility = MakeAllImageVisibility.bind(null, settings, user_email, category_name);
+  return (
+    <form action={makeAllImageVisibility}>
+      {state ==="enable"? 
+      <button className="bg-blue-500 hover:bg-blue-400 text-xs text-white font-bold py-1 px-6 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+              Visible      
+      </button> :
+      <button className="bg-gray-500 hover:bg-gray-400 text-xs  text-white font-bold py-1 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">
+               Not Visible
+      </button>
+      }
+    </form>
+  );
+}
+

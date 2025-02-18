@@ -27,7 +27,12 @@ export default {
             try {       
                 console.log("enter 1")       
                const user = await prisma.User.findUnique({where: {email: email}});
-               console.log("user ", user)     
+               console.log("enter 2", user)   
+               if(!user.password)
+               {
+                throw new Error("Another account already exists with the same e-mail address. User registered with a social app.");
+               }
+
                if (user) {
                     const isMatch =  await bcryptjs.compare(password, user.password); 
 
@@ -47,24 +52,24 @@ export default {
     GitHub({
         clientId: process.env.AUTH_GITHUB_ID,
         clientSecret: process.env.AUTH_GITHUB_SECRET,
-        authorization: {
-            params: {
-                prompt: "consent",
-                access_type: "offline",
-                response_type: "code",
-            },
-        },
+        // authorization: {
+        //     params: {
+        //         prompt: "consent",
+        //         access_type: "offline",
+        //         response_type: "code",
+        //     },
+        // },
     }),
     Google({
         clientId: process.env.AUTH_GOOGLE_ID,
         clientSecret: process.env.AUTH_GOOGLE_SECRET,
-        authorization: {
-            params: {
-                prompt: "consent",
-                access_type: "offline",
-                response_type: "code",
-            },
-        },
+        // authorization: {
+        //     params: {
+        //         prompt: "consent",
+        //         access_type: "offline",
+        //         response_type: "code",
+        //     },
+        // },
         
     }),
     ],

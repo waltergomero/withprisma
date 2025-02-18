@@ -46,9 +46,12 @@ export async function fetchUserPages(query) {
 
 export const fetchUserById = async (id) => {
     try {
-
-      const _user = await prisma.User.findUnique({where: {id: id}});  
+      const _user = await prisma.User.findUnique({
+        where: {id: id},
+        include:{ accounts: true},
+        });
       const user = JSON.parse(JSON.stringify(_user));
+      console.log("user action: ", user)
       return user
     } catch (err) {
       return({error: err + "Failed to fetch user!"});
@@ -219,11 +222,11 @@ export async function createUser( formData, register=false) {
 
   export async function fetchUserByEmailInAccount(email) {
     try {
-        return await prisma.User.findUnique({
+        const result = await prisma.User.findUnique({
             where: {email: email},
             include:{ accounts: true},
         });
-  
+        return result;
     } catch (error) {
   
       throw new Error('Failed to fetch User. ' + error.message);
@@ -268,14 +271,3 @@ export async function createUser( formData, register=false) {
     }
    
   }
-
-  export async function doSocialLogin(provider) {
-    console.log("provider: ", provider)
-   try{
-      const result = await signIn(provider, { redirectTo: "/admin" });
-    }
-    catch (error) {
-      console.log("errores: ", error )
-       return { error: "error 500" };
-     }
-   }
