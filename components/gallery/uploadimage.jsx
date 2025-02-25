@@ -20,6 +20,7 @@ const UploadImage = ({categories}) => {
     const [categoryValue, setCategoryValue] = useState(null);
     const [categoryText, setCategoryText] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [isColor, setIsColor] = useState(false);
   
     
     const uploadImagesHandler = async (e) => {
@@ -40,10 +41,45 @@ const UploadImage = ({categories}) => {
       setLoading(false);
       setIsActive(true);
    
-  };
+    };
 
+    //function isBlackAndWhite(event) {
+    const isBlackAndWhite = (event) => {
+      const file = event.target.files[0];
+      console.log(file);
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {  
+          const img = new Image();
+          img.src = e.target.result;
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            let isBlackOrWhite = true;
+      
+            for (let i = 0; i < data.length; i += 4) {
+              const r = data[i];
+              const g = data[i + 1];
+              const b = data[i + 2];
+              if (!(r === g && g === b)) {
+                isBlackOrWhite = false;
+                break;
+              }
+            } 
+            setIsColor(isBlackOrWhite);   
+          };
+        };
+        reader.readAsDataURL(file);
+      }
+    
+    }
 
-    const removeSelectedImage =(_name) =>{
+    const removeSelectedImage = (_name) =>{
         setSelectedImages(image => image.filter(x => x.name != _name)) 
         if(selectedImages.length == 1)
             {
@@ -51,7 +87,7 @@ const UploadImage = ({categories}) => {
             }
           }
 
-   const uploadImages = async (e) => {
+    const uploadImages = async (e) => {
     const API_PATH = "/api/dashboard/gallery/";
 
     if(categoryText === null) {
@@ -61,24 +97,26 @@ const UploadImage = ({categories}) => {
     else{
         if (selectedImages != null) {
           selectedImages && selectedImages?.map((image) => {
-            const extension = image.name.substr(image.name.lastIndexOf(".") + 1);    
-            new Compressor(image, {
-              quality: 0.9, // 0.6 can also be used, but its not recommended to go below.
-              maxWidth: 1920,
-              maxHeight: 1080,
-              success: (result) => {
-                const formdata = new FormData();
-                formdata.append("image", result);
-                formdata.append("extension", extension);
-                formdata.append("category_id", categoryValue);
-                formdata.append("category_name", categoryText);
-                formdata.append("user_email", user_email)
-                fetch(API_PATH, {
-                  method: "POST",
-                  body: formdata,
-                });
-              },
-            });
+            let isBlackOrWhite = isBlackAndWhite(image);
+            console.log(isBlackOrWhite);
+            // const extension = image.name.substr(image.name.lastIndexOf(".") + 1);    
+            // new Compressor(image, {
+            //   quality: 0.9, // 0.6 can also be used, but its not recommended to go below.
+            //   maxWidth: 1920,
+            //   maxHeight: 1080,
+            //   success: (result) => {
+            //     const formdata = new FormData();
+            //     formdata.append("image", result);
+            //     formdata.append("extension", extension);
+            //     formdata.append("category_id", categoryValue);
+            //     formdata.append("category_name", categoryText);
+            //     formdata.append("user_email", user_email)
+            //     fetch(API_PATH, {
+            //       method: "POST",
+            //       body: formdata,
+            //     });
+            //   },
+            // });
               
           });
         } 
