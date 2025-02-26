@@ -61,24 +61,26 @@ const UploadImage = ({categories}) => {
     else{
         if (selectedImages != null) {
           selectedImages && selectedImages?.map((image) => {
-            const extension = image.name.substr(image.name.lastIndexOf(".") + 1);    
-            new Compressor(image, {
-              quality: 0.9, // 0.6 can also be used, but its not recommended to go below.
-              maxWidth: 1920,
-              maxHeight: 1080,
-              success: (result) => {
-                const formdata = new FormData();
-                formdata.append("image", result);
-                formdata.append("extension", extension);
-                formdata.append("category_id", categoryValue);
-                formdata.append("category_name", categoryText);
-                formdata.append("user_email", user_email)
-                fetch(API_PATH, {
-                  method: "POST",
-                  body: formdata,
-                });
-              },
-            });
+            let isBW = isImageBlackAndWhite(image);
+            console.log("isblack? ", isBW);
+            let extension = image.name.substr(image.name.lastIndexOf(".") + 1);    
+            // new Compressor(image, {
+            //   quality: 0.9, // 0.6 can also be used, but its not recommended to go below.
+            //   maxWidth: 1920,
+            //   maxHeight: 1080,
+            //   success: (result) => {
+            //     const formdata = new FormData();
+            //     formdata.append("image", result);
+            //     formdata.append("extension", extension);
+            //     formdata.append("category_id", categoryValue);
+            //     formdata.append("category_name", categoryText);
+            //     formdata.append("user_email", user_email)
+            //     fetch(API_PATH, {
+            //       method: "POST",
+            //       body: formdata,
+            //     });
+            //   },
+            // });
               
           });
         } 
@@ -211,4 +213,27 @@ const UploadImage = ({categories}) => {
   )
 }
 
+function isImageBlackAndWhite(image) {
+  console.log("image: ", image)
+  const canvas = document.createElement('canvas');
+  canvas.width = image.width;
+  console.log("canvas.width: ", canvas.width)
+  canvas.height = image.naturalHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(image, 0, 0);
+
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+  for (let i = 0; i < imageData.length; i += 4) {
+    const red = imageData[i];
+    const green = imageData[i + 1];
+    const blue = imageData[i + 2];
+
+    if (red !== green || green !== blue) {
+      return false;
+    }
+  }
+
+  return true;
+}
 export default UploadImage

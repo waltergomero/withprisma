@@ -51,7 +51,6 @@ export const fetchUserById = async (id) => {
         include:{ accounts: true},
         });
       const user = JSON.parse(JSON.stringify(_user));
-      console.log("user action: ", user)
       return user
     } catch (err) {
       return({error: err + "Failed to fetch user!"});
@@ -270,4 +269,16 @@ export async function createUser( formData, register=false) {
       return { error: "error 500" };
     }
    
+  }
+
+  export async function doSocialLogin(provider) {
+    try {
+  await signIn(provider, { redirect: false })
+} 
+catch (error) {
+  if (error instanceof AuthError) {
+    return { error: error.cause?.err?.message };
+  }
+  return { error: "error 500" };
+}
   }

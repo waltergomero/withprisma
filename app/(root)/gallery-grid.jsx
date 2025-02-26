@@ -27,7 +27,7 @@ const GalleryGrid = ({images}) => {
                 (max-width: 1536px) 33vw,
                 25vw"
             />
-            <span className="absolute top-[50%] left-[20%] p-2 rounded-md uppercase  text-red-600 text-xl">{item.category_name}</span>
+            <span className="absolute bottom-[2%] left-[20%] p-2 bg-red-400 rounded-md uppercase  text-gray-300 text-md">{item.category_name}</span>
             </Link>
         ))
             }

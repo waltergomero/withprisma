@@ -4,20 +4,6 @@ import {fetchUserById, fetchUserByEmailInAccount} from "@/actions/user-actions";
  
 export const { auth, handlers, signIn, signOut } = NextAuth({
   callbacks: {
-    async signIn({ account, profile }) {
-      try {
-        
-          if(account && account.provider === "google" || account.provider === "github"){    
-            const user_account = await fetchUserByEmailInAccount(profile.email)
-            //console.log("user_account: ", user_account)
-            return user_account;
-          } 
-        return true;
-      } catch (error) {
-          throw new Error('Sign-in failed: ' + error.message);
-      }
-    },
-
     async jwt({ token }) {
       if(!token.sub) 
         return token;
@@ -27,11 +13,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if(!existingUser) 
         return token;
 
-      token.first_name = existingUser.first_name;
-      token.last_name = existingUser.last_name;
+      token.first_name = existingUser.first_name || "";
+      token.last_name = existingUser.last_name || "";
       token.name = existingUser.name;
-      token.isadmin = existingUser.isadmin;
-      token.provider = existingUser.accounts[0].provider;
+      token.isadmin = existingUser.isadmin || false;
+      token.provider = existingUser. provider || existingUser.accounts[0].provider;
 
       return token;
     },

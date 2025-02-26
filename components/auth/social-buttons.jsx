@@ -22,7 +22,7 @@ const SocialButtons = () => {
     event.preventDefault();
 
     try {
-       await signIn(provider, { redirectTo: "/admin" });
+      await signIn(provider, { redirectTo: "/admin" });
         
      } catch (error) {
       toast.error("Authentication error: " + error.message);
@@ -38,11 +38,11 @@ const SocialButtons = () => {
       onClick={(event) => handleClick(event, 'google')}>
         <FcGoogle className='w-6 h-6 mr-2'/> Google
       </button>
-      <button  type='submit' 
+      {/* <button  type='submit' 
       className='flex w-full justify-center rounded  p-1 text-sm text-black border' 
        onClick={(event) => handleClick(event, 'github')}>
         <FaGithub className='w-6 h-6 mr-2'/> Github
-      </button>
+      </button> */}
     </div>
     </form>
   )

@@ -115,7 +115,7 @@ const Sidebar =  ({ sidebarOpen, setSidebarOpen }) => {
                     <Fragment>
                       <Link
                         href="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname ===
+                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-xs text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname ===
                           "/gallery" ||  pathname.includes("gallery")) &&
                           "bg-graydark dark:bg-meta-4"}`}
                         onClick={e => {
@@ -132,12 +132,12 @@ const Sidebar =  ({ sidebarOpen, setSidebarOpen }) => {
                       <div
                         className={`translate transform overflow-hidden ${!open && "hidden"}`}
                       >
-                        <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
+                        <ul className="mb-5.5 mt-4 flex flex-col gap-2 pl-4">
                         <li>
                             <Link
                               href={`/admin/gallery/category/${0}`}
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname ===
-                                "/admin/gallery" && "text-white"}`}>
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-xs text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname ===
+                                "/admin/gallery/category/0" && "text-white"}`}>
                                Show all
                             </Link>
                           </li>
@@ -145,8 +145,8 @@ const Sidebar =  ({ sidebarOpen, setSidebarOpen }) => {
                           <li key={item.category_id}>
                             <Link
                               href={`/admin/gallery/category/${item.category_name}`}
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname ===
-                                "/admin/gallery" && "text-white"}`}
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-xs text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname ===
+                                `/admin/gallery/category/${encodeURIComponent(item.category_name)}` && "text-white"}`}
                             >
                               {item.category_name}
                             </Link>
@@ -161,7 +161,7 @@ const Sidebar =  ({ sidebarOpen, setSidebarOpen }) => {
               <li>
                 <Link
                   href="/admin/products"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes(
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-xs text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes(
                     "products"
                   ) && "bg-graydark dark:bg-meta-4"}`}
                 >
@@ -172,7 +172,7 @@ const Sidebar =  ({ sidebarOpen, setSidebarOpen }) => {
               <li>
                 <Link
                   href="/admin/categories"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes(
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-xs text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes(
                     "categories"
                   ) && "bg-graydark dark:bg-meta-4"}`}
                 >
@@ -183,7 +183,7 @@ const Sidebar =  ({ sidebarOpen, setSidebarOpen }) => {
               <li>
                 <Link
                   href="/admin/status"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes(
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-xs text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes(
                     "status"
                   ) && "bg-graydark dark:bg-meta-4"}`}
                 >
@@ -194,7 +194,7 @@ const Sidebar =  ({ sidebarOpen, setSidebarOpen }) => {
               <li>
                 <Link
                   href="/admin/users"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes(
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-xs text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes(
                     "users"
                   ) && "bg-graydark dark:bg-meta-4"}`}
                 >
@@ -205,7 +205,7 @@ const Sidebar =  ({ sidebarOpen, setSidebarOpen }) => {
               <li>
                 <Link
                   href="/admin/settings"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes(
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-xs text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes(
                     "settings"
                   ) && "bg-graydark dark:bg-meta-4"}`}
                 >
@@ -216,130 +216,6 @@ const Sidebar =  ({ sidebarOpen, setSidebarOpen }) => {
             </ul>
           </div>
 
-          <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
-              OTHERS
-            </h3>
-
-            <ul className="mb-6 flex flex-col gap-1.5">
-              <li>
-                <Link
-                  href="/chart"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes(
-                    "chart"
-                  ) && "bg-graydark dark:bg-meta-4"}`}
-                >
-                  <ChartBarIcon width="20" height="20"/>
-                  Chart
-                </Link>
-              </li>
-
-              <SidebarLinkGroup activeCondition={pathname === "/ui" || pathname.includes("ui")}  >
-                {(handleClick, open) => {
-                  return (
-                    <Fragment>
-                      <Link
-                        href="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname ===
-                          "/ui" ||
-                          pathname.includes("ui")) &&
-                          "bg-graydark dark:bg-meta-4"}`}
-                        onClick={e => {
-                          e.preventDefault()
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true)
-                        }}
-                      >
-                        <QueueListIcon width="20" height="20"/>
-                        UI Elements
-                        <ChevronDownIcon width="20" height="20" className={`absolute right-4 top-1/2 -translate-y-1/2 ${open &&
-                            "rotate-180"}`}/>
-                      </Link>
-                      <div
-                        className={`translate transform overflow-hidden ${!open &&
-                          "hidden"}`}
-                      >
-                        <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
-                          <li>
-                            <Link
-                              href="/ui/alerts"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname ===
-                                "/ui/alerts" && "text-white"}`}
-                            >
-                              Alerts
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/ui/buttons"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname ===
-                                "/ui/buttons" && "text-white"}`}
-                            >
-                              Buttons
-                            </Link>
-                          </li>
-                        </ul>
-                      </div>
-                    </Fragment>
-                  )
-                }}
-              </SidebarLinkGroup>
-              <SidebarLinkGroup
-                activeCondition={
-                  pathname === "/auth" || pathname.includes("auth")
-                }
-              >
-                {(handleClick, open) => {
-                  return (
-                    <Fragment>
-                      <Link
-                        href="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname ===
-                          "/auth" ||
-                          pathname.includes("auth")) &&
-                          "bg-graydark dark:bg-meta-4"}`}
-                        onClick={e => {
-                          e.preventDefault()
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true)
-                        }}
-                      >
-                        <ArrowRightEndOnRectangleIcon width="20" height="20"/>
-                        Authentication
-                        <ChevronDownIcon width="20" height="20" className={`absolute right-4 top-1/2 -translate-y-1/2 ${open && "rotate-180"}`}/>
-                      </Link>
-                      <div
-                        className={`translate transform overflow-hidden ${!open && "hidden"}`}
-                      >
-                        <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
-                          <li>
-                            <Link
-                              href="/auth/signin"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname ===
-                                "/auth/signin" && "text-white"}`}
-                            >
-                              Sign In
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/auth/signup"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname ===
-                                "/auth/signup" && "text-white"}`}
-                            >
-                              Sign Up
-                            </Link>
-                          </li>
-                        </ul>
-                      </div>
-                    </Fragment>
-                  )
-                }}
-              </SidebarLinkGroup>          
-            </ul>
-          </div>
         </nav>
       </div>
     </aside>

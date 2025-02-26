@@ -26,7 +26,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     if(error === 'OAuthAccountNotLinked'){
-          toast.error("Error: This email is already associated with another account. Please sign in with that account or use a different email.")
+          toast.error("This email was registered with email and passowrd. Please sign in using your credentials.")
       }
     }, [])
   

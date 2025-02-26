@@ -24,13 +24,11 @@ export default {
 
             const { email, password } = credentials;
             
-            try {       
-                console.log("enter 1")       
+            try {         
                const user = await prisma.User.findUnique({where: {email: email}});
-               console.log("enter 2", user)   
                if(!user.password)
                {
-                throw new Error("Another account already exists with the same e-mail address. User registered with a social app.");
+                throw new Error("Another account already exists with the same e-mail address. This email was registered with Google app.");
                }
 
                if (user) {

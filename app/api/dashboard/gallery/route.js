@@ -27,8 +27,8 @@ export async function POST(req) {
     var sizeOf = require("image-size");
     var dimensions = sizeOf(buffer);
  
-    var format = "Landscape";
-     if (dimensions.height > dimensions.width) format = "Portrait";
+    var format = "landscape";
+     if (dimensions.height > dimensions.width) format = "portrait";
 
     const partialSrc = `/images/gallery/${imageName}`;
     const src = `./public/${partialSrc}`

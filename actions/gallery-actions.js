@@ -272,4 +272,22 @@ export async function MakeAllImageVisibility(settings, user_email, category_name
   revalidatePath("/admin/gallery");
 }
 
+export const FetchImagesByOrientation = async (orientation) => {
+ 
+  try {
+    console.log("format: ", orientation)
+    const _images = await prisma.Gallery.findMany({
+      where: {
+        format: {
+          contains: orientation,
+           mode: 'insensitive',
+          }}}) 
+    console.log("images: ", _images)
+    const images = JSON.parse(JSON.stringify(_images));
+    return images
+
+  } catch (err) {
+    return({error: "Failed to fetch gallery images!"});
+  }
+};
 
