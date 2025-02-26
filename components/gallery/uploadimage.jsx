@@ -44,40 +44,35 @@ const UploadImage = ({categories}) => {
     };
 
     //function isBlackAndWhite(event) {
-    const isBlackAndWhite = (event) => {
-      const file = event.target.files[0];
-      console.log(file);
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {  
-          const img = new Image();
-          img.src = e.target.result;
-          img.onload = () => {
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0);
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imageData.data;
-            let isBlackOrWhite = true;
-      
-            for (let i = 0; i < data.length; i += 4) {
-              const r = data[i];
-              const g = data[i + 1];
-              const b = data[i + 2];
-              if (!(r === g && g === b)) {
-                isBlackOrWhite = false;
-                break;
+      const isImageGrayscale = (file) => {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+              const canvas = document.createElement('canvas');
+              canvas.width = img.width;
+              canvas.height = img.height;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0);
+              const imageData = ctx.getImageData(0, 0, img.width, img.height).data;
+              let grayscale = true;
+              for (let i = 0; i < imageData.length; i += 4) {
+                const red = imageData[i];
+                const green = imageData[i + 1];
+                const blue = imageData[i + 2];
+                if (red !== green || green !== blue) {
+                  grayscale = false;
+                  break;
+                }
               }
-            } 
-            setIsColor(isBlackOrWhite);   
+              resolve(grayscale);
+            };
+            img.src = event.target.result;
           };
-        };
-        reader.readAsDataURL(file);
-      }
-    
-    }
+          reader.readAsDataURL(file);
+        });
+      };
 
     const removeSelectedImage = (_name) =>{
         setSelectedImages(image => image.filter(x => x.name != _name)) 
@@ -97,12 +92,11 @@ const UploadImage = ({categories}) => {
     else{
         if (selectedImages != null) {
           selectedImages && selectedImages?.map((image) => {
-            let isBW = isImageBlackAndWhite(image);
-            console.log("isblack? ", isBW);
+            const isGrayscale =  isImageGrayscale(image);
+            console.log(isGrayscale);
             let extension = image.name.substr(image.name.lastIndexOf(".") + 1);    
 
-            let isBlackOrWhite = isBlackAndWhite(image);
-            console.log(isBlackOrWhite);
+
             // const extension = image.name.substr(image.name.lastIndexOf(".") + 1);    
 
             // new Compressor(image, {
