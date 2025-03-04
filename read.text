@@ -1,0 +1,3 @@
+to push database changes:
+1: prisma generate
+2: prisma db push

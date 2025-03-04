@@ -23,6 +23,7 @@ export default async function Home() {
           src={`/images/cover/cover_1.jpg`}
           height={560}
           width={2048}
+          priority={true}
           className="h-full w-full object-cover"
           alt="cover image"
         />   

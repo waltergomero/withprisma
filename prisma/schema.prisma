@@ -43,6 +43,7 @@ model Gallery {
   height                Int
   caption               String
   make_visible          Boolean
+  isblack_white         Boolean
   created_by            String
   updated_by            String
   createdAt     DateTime @default(now())

@@ -40,10 +40,10 @@ const GalleryGrid =  ({images, category_name}) => {
           alt={""}
           className="transform rounded-lg brightness-90 transition will-change-auto group-hover:brightness-110"
           style={{ transform: 'translate3d(0, 0, 0)' }}             
-          src={ item.src}
+          src={item.src}
           width={720}
           height={480}
-          layout="responsive"
+          priority={false}
           sizes="(max-width: 640px) 100vw,
             (max-width: 1280px) 50vw,
             (max-width: 1536px) 33vw,

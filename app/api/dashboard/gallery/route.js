@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import fs from "node:fs/promises";
 import prisma from "@/lib/prisma";
+const sharp = require('sharp');
+import path from 'path';
 
 
 export async function POST(req) {
@@ -33,7 +35,12 @@ export async function POST(req) {
     const partialSrc = `/images/gallery/${imageName}`;
     const src = `./public/${partialSrc}`
     await fs.writeFile(src, buffer);
-    
+
+    //check if image is black and white
+    const absolutePath = path.join(process.cwd(), 'public', partialSrc);
+
+    //const isblack_white = await isImageBlackAndWhite(absolutePath);
+    //console.log("is b and w? ", isblack_white)
     const addImageToGallery = {
       category_id: category_id,
       category_name: category_name,
@@ -44,11 +51,10 @@ export async function POST(req) {
       height: dimensions.height,
       caption: "",
       make_visible: false,
+      isblack_white: false,
       created_by: user_email,
       updated_by: user_email,
     };
- 
-
     const data = await prisma.gallery.create({ data: addImageToGallery});
  
     return NextResponse.json({ status: "success" });
@@ -56,4 +62,21 @@ export async function POST(req) {
 
     return NextResponse.json({ status: "fail", error: e });
   }
+}
+
+async function isImageBlackAndWhite(imagePath) {
+  const { data, info } = await sharp(imagePath).raw().toBuffer({ resolveWithObject: true });
+  const { channels } = info;
+  console.log(" chanbels: ", channels)
+  if (channels === 1) {
+    return true; // Image is grayscale
+  }
+
+  for (let i = 0; i < data.length; i += channels) {
+    const [r, g, b] = [data[i], data[i + 1], data[i + 2]];
+    if (r !== g || g !== b) {
+      return false; // Image has color
+    }
+  }
+  return true; // Image is black and white
 }

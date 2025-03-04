@@ -9,6 +9,8 @@ import { useSession } from "next-auth/react";
 import heic2any from "heic2any";
 
 
+
+
 const UploadImage = ({categories}) => {
     const { data: session } = useSession();
     const user_email =   session?.user?.email;
@@ -20,7 +22,7 @@ const UploadImage = ({categories}) => {
     const [categoryValue, setCategoryValue] = useState(null);
     const [categoryText, setCategoryText] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [isColor, setIsColor] = useState(false);
+    const [isBW, setIsBW] = useState(false);
   
     
     const uploadImagesHandler = async (e) => {
@@ -43,36 +45,6 @@ const UploadImage = ({categories}) => {
    
     };
 
-    //function isBlackAndWhite(event) {
-      const isImageGrayscale = (file) => {
-        return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            const img = new Image();
-            img.onload = () => {
-              const canvas = document.createElement('canvas');
-              canvas.width = img.width;
-              canvas.height = img.height;
-              const ctx = canvas.getContext('2d');
-              ctx.drawImage(img, 0, 0);
-              const imageData = ctx.getImageData(0, 0, img.width, img.height).data;
-              let grayscale = true;
-              for (let i = 0; i < imageData.length; i += 4) {
-                const red = imageData[i];
-                const green = imageData[i + 1];
-                const blue = imageData[i + 2];
-                if (red !== green || green !== blue) {
-                  grayscale = false;
-                  break;
-                }
-              }
-              resolve(grayscale);
-            };
-            img.src = event.target.result;
-          };
-          reader.readAsDataURL(file);
-        });
-      };
 
     const removeSelectedImage = (_name) =>{
         setSelectedImages(image => image.filter(x => x.name != _name)) 
@@ -92,30 +64,24 @@ const UploadImage = ({categories}) => {
     else{
         if (selectedImages != null) {
           selectedImages && selectedImages?.map((image) => {
-            const isGrayscale =  isImageGrayscale(image);
-            console.log(isGrayscale);
-            let extension = image.name.substr(image.name.lastIndexOf(".") + 1);    
-
-
-            // const extension = image.name.substr(image.name.lastIndexOf(".") + 1);    
-
-            // new Compressor(image, {
-            //   quality: 0.9, // 0.6 can also be used, but its not recommended to go below.
-            //   maxWidth: 1920,
-            //   maxHeight: 1080,
-            //   success: (result) => {
-            //     const formdata = new FormData();
-            //     formdata.append("image", result);
-            //     formdata.append("extension", extension);
-            //     formdata.append("category_id", categoryValue);
-            //     formdata.append("category_name", categoryText);
-            //     formdata.append("user_email", user_email)
-            //     fetch(API_PATH, {
-            //       method: "POST",
-            //       body: formdata,
-            //     });
-            //   },
-            // });
+            const extension = image.name.substr(image.name.lastIndexOf(".") + 1);    
+            new Compressor(image, {
+              quality: 0.9, // 0.6 can also be used, but its not recommended to go below.
+              maxWidth: 1920,
+              maxHeight: 1080,
+              success: (result) => {
+                const formdata = new FormData();
+                formdata.append("image", result);
+                formdata.append("extension", extension);
+                formdata.append("category_id", categoryValue);
+                formdata.append("category_name", categoryText);
+                formdata.append("user_email", user_email)
+                fetch(API_PATH, {
+                  method: "POST",
+                  body: formdata,
+                });
+              },
+            });
               
           });
         } 
