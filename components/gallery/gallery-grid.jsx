@@ -21,7 +21,7 @@ const GalleryGrid =  ({images, category_name}) => {
   return (
     <>
   <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-2">
-   <div className='flex justify-between  font-medium text-bodydark2 font-semibold'>
+   <div className='flex justify-between text-bodydark2 font-semibold'>
     <div>Category: {category_name === "0" ? "All" : category_name} </div>
     <div>
       <span>Set all images: </span>
@@ -32,9 +32,9 @@ const GalleryGrid =  ({images, category_name}) => {
     </div>
     
    </div>
-    <div className="mt-4 columns-1 sm:columns-2 md:columns-3 lg:columns-3 xl:columns-4 2xl:columns-5">
+    <div className="mt-4 columns-1 sm:columns-2 md:columns-3 lg:columns-3 xl:columns-4 ">
     {images && images?.map((item) =>(
-      <div className='relative after:content group relative mb-4 block w-full  after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight' 
+      <div className='relative after:content group mb-4 block w-full  after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight' 
          key={item.image_name}>
           <Image       
           alt={""}
@@ -49,6 +49,9 @@ const GalleryGrid =  ({images, category_name}) => {
             (max-width: 1536px) 33vw,
             25vw"
         />
+        <div className='absolute p-1 text-white text-center text-sm w-full bottom-0  rounded-sm bg-gray-500'>
+            {item.caption}
+        </div>
 
         {is_admin || (user_email===item.created_by) ?
           <div>
@@ -58,7 +61,7 @@ const GalleryGrid =  ({images, category_name}) => {
         }
       {is_admin ?
         <div>
-            { item.make_visible ? 
+            { item.is_visible ? 
                 <SetImageNotVisible image_id={item.id} image_src={item.src} user_email={user_email}/>         
                 :  <SetImageVisible image_id={item.id} user_email={user_email} /> 
             }

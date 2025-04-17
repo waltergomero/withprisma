@@ -4,12 +4,13 @@ import React  from 'react'
 import { useState} from "react";
 import { PlusIcon} from "@heroicons/react/24/outline";
 import { updateImageCategory } from '@/actions/gallery-actions';
-import {  useRouter } from 'next/navigation';
+import { redirect,  useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import { useSession } from "next-auth/react";
 
 const EditImageForm = ({image, categories}) => {
+  console.log("image: ", image)
     const { data: session } = useSession();
     const user_email =   session?.user?.email;
 
@@ -40,12 +41,9 @@ const EditImageForm = ({image, categories}) => {
         formdata.append("updated_by", user_email);
 
         await updateImageCategory(formdata);
-        toast.success("Image information updated successfully.");
+        toast.success("Image caption updated successfully.");
     }
-    setTimeout(() => {
-      router.refresh();
-    }, 1000)
-
+    redirect(`/admin/gallery/category/${categoryText}`)
   }
 
   const handleClick = e => {
@@ -62,17 +60,19 @@ const EditImageForm = ({image, categories}) => {
   };
 
   return (
-        <div className="w-1/3 rounded-sm p-4 mt-2 border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div className="mb-2 flex">
+    <div className='flex flex-row justify-center items-center'>
+    <div className=" rounded-sm text-sm sm:w-full md:w-1/2  border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-2">
+           <div className="mb-2">
             <label className="mb-1 block text-sm font-medium text-black dark:text-white">
                 Category:<span className="text-meta-1">*</span>
               </label>
+              <div>
               <select
                 name="category_id"
                 onClick={handleClick}
                 defaultValue={categoryValue}
                 required
-                className="peer ml-2 block w-[25%] cursor-pointer rounded-md border border-gray-300 px-3 mb-2 py-1 text-sm outline-2 placeholder:text-gray-500">
+                className="peer block w-full cursor-pointer rounded-md border border-gray-300 px-3 mb-2 py-1 text-sm outline-2 placeholder:text-gray-500">
                 {categories.map((category) => (
                   <option key={category.id} value={category.id}>
                     {category.category_name}
@@ -80,14 +80,14 @@ const EditImageForm = ({image, categories}) => {
                 ))}
               </select>
             </div>
-            <div className="flex w-16 md:w-32 lg:w-48">
+            </div>
+            <div>
                 <Image 
                     className="rounded-md"
                     width="720"  
                     height="480"                          
                     src={image.src}  
                     alt={image.caption} 
-                    layout="responsive"
                     sizes="(max-width: 640px) 100vw,
                       (max-width: 1280px) 50vw,
                       (max-width: 1536px) 33vw,
@@ -100,7 +100,7 @@ const EditImageForm = ({image, categories}) => {
                   <textarea
                     rows={2}
                     name="caption"
-                    defaultValue={caption}
+                    defaultValue={image.caption}
                     onChange={(e) => setCaption(e.target.value)}
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent px-1 py-1 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   ></textarea>
@@ -108,12 +108,13 @@ const EditImageForm = ({image, categories}) => {
                 <div className="mt-6 flex justify-center">                    
                 <button type="submit"
                         onClick={saveImageInformation}
-                        className="flex h-10 mb-2 items-center rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors px-4 text-sm font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                        <span className="hidden md:block">Save Image Information</span>
+                        className="flex  w-2/3 h-10 mb-2 items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors px-4 text-sm font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                        Save Image Information
                         <PlusIcon className="h-6 md:ml-4" />
                         </button>
                 </div>
-            </div>        
+            </div> 
+        </div>      
   )
 }
 

@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-
 import { RowsPhotoAlbum } from "react-photo-album";
 import "react-photo-album/rows.css";
 
@@ -17,7 +16,7 @@ import "yet-another-react-lightbox/plugins/thumbnails.css";
 
 const OrientationLightbox = ({images, orientation}) => {
     const [index, setIndex] = useState(-1);
-
+  
   return (
   <main className="pt-16">
     <div className="mt-1 flex py-10 items-center bg-black-2">

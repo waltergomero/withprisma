@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import db from "@/utils/dbconnection";
 import Images from "@/models/image";
 import fs from "node:fs/promises";
+import path from 'path';
 
 
 export async function POST(req) {
@@ -31,21 +32,24 @@ export async function POST(req) {
      if (dimensions.height > dimensions.width) format = "Portrait";
 
     const partialSrc = `/images/product/${imageName}`;
-    const src = `./public/${partialSrc}`
-    await fs.writeFile(src, buffer);
+
+    //check if folder exists in public folder
+
+    // const src = `./public/${partialSrc}`
+    // await fs.writeFile(src, buffer);
     
-    const addImage = new Images({
-      image_name: imageName,
-      product_id: product_id,
-      src: partialSrc,
-      format: format,
-      width: dimensions.width,
-      height: dimensions.height,
-      order: order,
-    });
-    db.connect();
-    const data = await addImage.save();
-    db.disconnect();
+    // const addImage = new Images({
+    //   image_name: imageName,
+    //   product_id: product_id,
+    //   src: partialSrc,
+    //   format: format,
+    //   width: dimensions.width,
+    //   height: dimensions.height,
+    //   order: order,
+    // });
+    // db.connect();
+    // const data = await addImage.save();
+    // db.disconnect();
 
     return NextResponse.json({ status: "success" });
   } catch (e) {

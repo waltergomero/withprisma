@@ -4,7 +4,11 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { unstable_noStore as noStore } from 'next/cache';
 import fs from "fs";
-import prisma from "@/lib/prisma"
+import prisma from "@/lib/prisma";
+import { PrismaClient } from '@prisma/client';
+import prismaRandom from 'prisma-extension-random';
+
+const prismarandom = new PrismaClient().$extends(prismaRandom());
 
 
 const ITEM_PER_PAGE = 10;
@@ -60,7 +64,7 @@ export const fetchVisibleImagesByCategory = async (category_id) => {
   try {
     const _images = await prisma.Gallery.findMany({
                     where: {
-                        AND: [{category_id: category_id}, {make_visible: true}]
+                        AND: [{category_id: category_id}, {is_visible: true}]
                           },
                     select: {
                       category_name: true, src: true, width: true, height:true, format:true
@@ -111,7 +115,7 @@ export const fetchImageById = async (id) => {
   try {
     const _image = await prisma.Gallery.findUnique({ 
       where: {id: id},
-      select: { id: true, image_name: true, category_id: true, category_name: true, src: true}}); 
+      select: { id: true, image_name: true, category_id: true, category_name: true, src: true, caption: true}}); 
 
     const image = JSON.parse(JSON.stringify(_image));
     return image;
@@ -138,6 +142,8 @@ export async function updateImageCategory(formData) {
       caption: caption,
       updated_by: updated_by,
     };
+
+    console.log("update image information: ", id,  query);
 
     await prisma.Gallery.update({ 
           where: {id: id}, data: query});
@@ -194,7 +200,7 @@ export async function deleteImageFromGallery(image_id, image_src) {
 export async function MakeImageVisible(image_id, user_email) {
   try {
       const query = {
-        make_visible: true,
+        is_visible: true,
     };    
 
     await prisma.Gallery.update({ where: {id: image_id}, data: query});
@@ -245,7 +251,7 @@ export async function MakeImageNotVisible(image_id, image_src) {
 
   try {
     const query = {
-      make_visible: false,
+      is_visible: false,
   };    
     await prisma.Gallery.update({ where: {id: image_id}, data: query });
     
@@ -260,7 +266,7 @@ export async function MakeAllImageVisibility(settings, user_email, category_name
   console.log("actions params: ", settings, user_email, category_name)
   try {
     const query = {
-      make_visible: settings,
+      is_visible: settings,
   };  
     if(category_name === "0")  
       await prisma.Gallery.updateMany({ data: query });
@@ -275,15 +281,14 @@ export async function MakeAllImageVisibility(settings, user_email, category_name
 export const FetchImagesByOrientation = async (orientation) => {
  
   try {
-    console.log("format: ", orientation)
     const _images = await prisma.Gallery.findMany({
       where: {
         format: {
           contains: orientation,
            mode: 'insensitive',
           }}}) 
-    console.log("images: ", _images)
     const images = JSON.parse(JSON.stringify(_images));
+    console.log("server orientation images: ", images)
     return images
 
   } catch (err) {
@@ -291,3 +296,19 @@ export const FetchImagesByOrientation = async (orientation) => {
   }
 };
 
+
+export const FetchRandomImages = async () => {
+ 
+  try {
+    const _images = await prismarandom.Gallery.findManyRandom( 50, {
+     select: { id: true, category_id: true, category_name: true, image_name: true, src: true, },
+      where: { is_visible: true, },
+     }) 
+    const images = JSON.parse(JSON.stringify(_images));
+    console.log("server random images: ", images)
+    return images
+
+  } catch (err) {
+    return({error: "Failed to fetch random images!"});
+  }
+};

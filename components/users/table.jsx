@@ -30,7 +30,7 @@ export default async function UsersTable({ query, currentPage }) {
                       <div>
                         <div className="mb-2 flex items-center">
                           <Image
-                            src="/user-icon.png"
+                            src="/user-icon.jpg"
                             className="mr-2 rounded-full"
                             width={28}
                             height={28}

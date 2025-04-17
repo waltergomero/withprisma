@@ -85,8 +85,8 @@ const Sidebar =  ({ sidebarOpen, setSidebarOpen }) => {
         <Link href="/">
           <Image
             width={176}
-            height={32}
-            src={"/images/logo/logo.svg"}
+            height={32} 
+            src={"/images/logo/logo-dark.svg"}
             alt="Logo"
             priority
           />

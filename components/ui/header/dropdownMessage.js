@@ -104,7 +104,7 @@ const DropdownMessage = () => {
                 <Image
                   width={112}
                   height={112}
-                  src={"/images/user/user-02.png"}
+                  src={"/images/user/user-01.jpg"}
                   alt="User"
                   style={{
                     width: "auto",
@@ -131,7 +131,7 @@ const DropdownMessage = () => {
                 <Image
                   width={112}
                   height={112}
-                  src={"/images/user/user-01.png"}
+                  src={"/images/user/user-01.jpg"}
                   alt="User"
                   style={{
                     width: "auto",

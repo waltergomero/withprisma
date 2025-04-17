@@ -42,7 +42,7 @@ model Gallery {
   width                 Int
   height                Int
   caption               String
-  make_visible          Boolean
+  is_visible            Boolean
   isblack_white         Boolean
   created_by            String
   updated_by            String

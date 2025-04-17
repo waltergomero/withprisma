@@ -18,6 +18,7 @@ import { useSearchParams } from 'next/navigation';
 const LoginForm = () => {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
+  console.log("error: ", searchParams)
 
   const router = useRouter();
   const [state, setState] = useState(null);
@@ -25,7 +26,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if(error === 'OAuthAccountNotLinked'){
+    if(error === 'error?error=AccessDenied'){
           toast.error("This email was registered with email and passowrd. Please sign in using your credentials.")
       }
     }, [])

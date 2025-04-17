@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import fs from "node:fs/promises";
 import prisma from "@/lib/prisma";
-const sharp = require('sharp');
+import sharp from 'sharp';
 import path from 'path';
+const fs = require('fs');
 
 
 export async function POST(req) {
@@ -14,6 +14,8 @@ export async function POST(req) {
     const category_id = formData.get("category_id");
     const category_name = formData.get("category_name");
     const user_email = formData.get("user_email");
+    const image_caption = formData.get("caption");
+    
 
     var date = new Date();
     const unixTimestamp = Math.floor(date.getTime());
@@ -32,30 +34,39 @@ export async function POST(req) {
     var format = "landscape";
      if (dimensions.height > dimensions.width) format = "portrait";
 
-    const partialSrc = `/images/gallery/${imageName}`;
-    const src = `./public/${partialSrc}`
-    await fs.writeFile(src, buffer);
+    const partialDir = '/images/gallery/' + category_name;
+    const dir = path.join(process.cwd(), 'public', partialDir);
+  
+    const dirExist = await checkPublicPath(dir);
 
-    //check if image is black and white
-    const absolutePath = path.join(process.cwd(), 'public', partialSrc);
+    if(dirExist === false){
+       fs.mkdirSync(dir, { recursive: true });
+     }
+    
+    const partialPath = partialDir + "/" + imageName;
+    const src = `./public/${partialPath}`
+    const absolutePath = dir + "/" + imageName;
 
-    //const isblack_white = await isImageBlackAndWhite(absolutePath);
-    //console.log("is b and w? ", isblack_white)
+    await fs.writeFileSync(src, buffer);
+
+    const isBW = await isBlackAndWhite(absolutePath);
+ 
     const addImageToGallery = {
       category_id: category_id,
       category_name: category_name,
       image_name: imageName,
-      src: partialSrc,
+      src: partialPath,
       format: format,
       width: dimensions.width,
       height: dimensions.height,
-      caption: "",
-      make_visible: false,
-      isblack_white: false,
+      caption: image_caption,
+      is_visible: false,
+      isblack_white: isBW,
       created_by: user_email,
       updated_by: user_email,
     };
-    const data = await prisma.gallery.create({ data: addImageToGallery});
+   
+   const data = await prisma.gallery.create({ data: addImageToGallery});
  
     return NextResponse.json({ status: "success" });
   } catch (e) {
@@ -64,19 +75,30 @@ export async function POST(req) {
   }
 }
 
-async function isImageBlackAndWhite(imagePath) {
-  const { data, info } = await sharp(imagePath).raw().toBuffer({ resolveWithObject: true });
-  const { channels } = info;
-  console.log(" chanbels: ", channels)
-  if (channels === 1) {
-    return true; // Image is grayscale
+async function isBlackAndWhite(imagePath) {
+  const image = sharp(imagePath);
+
+  // Retrieve raw pixel data
+  const { data, info } = await image.raw().toBuffer({ resolveWithObject: true });
+
+  // Check if all pixels are black and white
+  let isBlackAndWhite = true;
+  for (let i = 0; i < data.length; i += info.channels) {
+      const r = data[i];     // Red channel
+      const g = data[i + 1]; // Green channel
+      const b = data[i + 2]; // Blue channel
+
+      // If RGB values aren't equal, it's not black and white
+      if (r !== g || g !== b) {
+          isBlackAndWhite = false;
+          break;
+      }
   }
 
-  for (let i = 0; i < data.length; i += channels) {
-    const [r, g, b] = [data[i], data[i + 1], data[i + 2]];
-    if (r !== g || g !== b) {
-      return false; // Image has color
-    }
-  }
-  return true; // Image is black and white
+  return isBlackAndWhite;
 }
+
+async function checkPublicPath(dir){
+  const result =  await fs.existsSync(dir);
+  return result;
+};

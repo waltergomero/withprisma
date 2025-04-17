@@ -16,6 +16,7 @@ import "yet-another-react-lightbox/plugins/thumbnails.css";
 
 
 const CategoryLightbox = ({images}) => {
+  console.log("images: ", images)
     const [index, setIndex] = useState(-1);
   const categoryname = "CATEGORY : " + images[0]["category_name"];
 
@@ -30,7 +31,7 @@ const CategoryLightbox = ({images}) => {
     </div>
  
 
-    <div className="p-1 gap-1 columns-1  md:columns-2 lg:columns-3 xl:columns-4 xl:columns-5  mb-2"> 
+    <div className="p-1 gap-1 columns-1  md:columns-2 lg:columns-3 xl:columns-4 2xl:columns-5  mb-2"> 
 
       <RowsPhotoAlbum photos={images} targetRowHeight={350} onClick={({ index }) => setIndex(index)} />
 

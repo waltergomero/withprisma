@@ -25,17 +25,18 @@ export default {
             const { email, password } = credentials;
             
             try {         
-               const user = await prisma.User.findUnique({where: {email: email}});
-               if(!user.password)
+               const _user = await prisma.User.findUnique({where: {email: email}});
+               if(!_user.password)
                {
-                throw new Error("Another account already exists with the same e-mail address. This email was registered with Google app.");
+                const account = await prisma.Account.findFirst({where: {userId: _user.id}});
+                throw new Error(`Another account already exists with the same e-mail address. This email was registered with ${account.provider} app.`);
                }
 
-               if (user) {
-                    const isMatch =  await bcryptjs.compare(password, user.password); 
+               if (_user) {
+                    const isMatch =  await bcryptjs.compare(password, _user.password); 
 
                     if (isMatch) {
-                        return user;
+                        return _user;
                     } else {
                         throw new Error("Password is not correct");
                     }

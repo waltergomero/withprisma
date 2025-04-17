@@ -13,7 +13,7 @@ export function DeleteImageBtn({ image_id, image_src}) {
   const deleteImageId = deleteImageFromGallery.bind(null, image_id, image_src);
   return (
     <form action={deleteImageId}>
-      <button className="absolute top-1 right-0 rounded-sm bg-rose-400">
+      <button className="absolute top-1 right-0 rounded-sm bg-red-500">
         <TrashIcon className="w-6 text-white" />
       </button>
     </form>

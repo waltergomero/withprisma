@@ -22,10 +22,11 @@ const SocialButtons = () => {
     event.preventDefault();
 
     try {
-      await signIn(provider, { redirectTo: "/admin" });
+     const result = await signIn(provider) //, { redirectTo: "/admin" });
+     console.log("result: ", result)
         
-     } catch (error) {
-      toast.error("Authentication error: " + error.message);
+     } catch (err) {
+      toast.error("Authentication error: " + err.message);
      }
    };
 

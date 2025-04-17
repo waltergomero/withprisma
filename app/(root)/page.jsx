@@ -31,7 +31,7 @@ export default async function Home() {
 <div className="flex py-4 items-center bg-black-2">
     <div className="flex-grow border-t border-gray-400"></div>
     <Link href="/category" className="flex-shrink mx-2 text-gray-400">CATEGORY</Link> | 
-    <Link href="" className="flex-shrink mx-2 text-gray-400">COLLECTIONS</Link> |
+    <Link href="/collections" className="flex-shrink mx-2 text-gray-400">COLLECTIONS</Link> |
     <Link href="/orientation/landscape" className="flex-shrink mx-2 text-gray-400">LANDSCAPE</Link> |
     <Link href="/orientation/portrait"  className="flex-shrink mx-2 text-gray-400">PORTRAIT</Link>
     <div className="flex-grow border-t border-gray-400"></div>
